@@ -93,6 +93,22 @@ function pasangTombolMenu() {
   for (const tautan of nav.querySelectorAll('a')) {
     tautan.addEventListener('click', () => setel(false));
   }
+
+  /* Escape menutup menu dan mengembalikan fokus ke tombolnya. */
+  document.addEventListener('keydown', (peristiwa) => {
+    if (peristiwa.key !== 'Escape' || nav.hidden) return;
+
+    setel(false);
+    tombol.focus();
+  });
+
+  /* Ketuk di luar header juga menutup menu. */
+  document.addEventListener('click', (peristiwa) => {
+    if (nav.hidden) return;
+    if (peristiwa.target.closest('.situs-header')) return;
+
+    setel(false);
+  });
 }
 
 pasangTombolMenu();

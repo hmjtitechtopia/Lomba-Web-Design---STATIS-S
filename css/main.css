@@ -188,6 +188,9 @@ ul, ol {
   top: 0;
   z-index: 10;
   display: flex;
+  /* Wajib: tanpa ini daftar tautan yang ber-flex-basis 100% ikut berebut
+     ruang di baris yang sama, menjepit logo dan menindih judul hero. */
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--sela-2);
@@ -210,6 +213,8 @@ ul, ol {
   font-weight: 600;
   color: var(--teluk);
   text-decoration: none;
+  /* Nama merek tidak boleh patah jadi dua baris saat menu dibuka. */
+  white-space: nowrap;
 }
 
 .situs-merek__ikon {
@@ -217,54 +222,49 @@ ul, ol {
   height: 30px;
 }
 
-/* Label/Nav: Figtree Medium 16/20, warna Tinta, jarak antar tautan 36. */
-.situs-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sela-1) 36px;
-}
-
+/* Label/Nav: Figtree Medium 16/20. */
 .situs-nav a {
   position: relative;
-  display: inline-block;
-  color: var(--tinta);
+  display: flex;
+  align-items: center;
   font-size: var(--ukuran-label);
   line-height: 20px;
   font-weight: 500;
   text-decoration: none;
 }
 
-/* "Garis aktif" Figma 855:234: batang 24 x 3 bersudut penuh, di tengah,
-   6px di bawah label. Di Figma keadaan ini disembunyikan pada hero. */
-.situs-nav a::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 26px;
-  width: 24px;
-  height: 3px;
-  margin-left: -12px;
-  border-radius: 999px;
-  background-color: transparent;
-}
-
-.situs-nav a:hover::after,
-.situs-nav a[aria-current]::after {
-  background-color: var(--kuning);
-}
-
 /* Layar sempit (Figma 855:675): hanya logo dan tombol menu yang tampil.
-   Daftar tautan pindah ke baris sendiri saat menu dibuka. Figma tidak
-   punya frame menu terbuka, jadi bentuknya daftar bertumpuk sederhana. */
+   Figma tidak punya frame menu terbuka, jadi panel di bawah ini keputusan
+   implementasi — bentuknya mengikuti bahasa visual kartu: permukaan Layar,
+   garis Pasir, sudut 20. Tanpa permukaan sendiri, tautan akan terbaca di
+   atas ilustrasi hero. */
 .situs-nav {
   order: 3;
   flex-basis: 100%;
+  margin-top: var(--sela-1);
+  border: 1px solid var(--pasir);
+  border-radius: 20px;
+  background-color: var(--layar);
+  box-shadow: 0 12px 32px rgba(18, 38, 43, 0.18);
 }
 
 .situs-nav ul {
+  display: flex;
   flex-direction: column;
-  gap: var(--sela-2);
-  padding: var(--sela-2) 0 0;
+  padding: var(--sela-1);
+}
+
+/* Target sentuh 44px penuh selebar panel. */
+.situs-nav a {
+  min-height: 44px;
+  padding-inline: var(--sela-2);
+  border-radius: var(--sudut);
+  color: var(--teluk);
+}
+
+.situs-nav a:hover,
+.situs-nav a[aria-current] {
+  background-color: var(--pasir);
 }
 
 
@@ -1389,16 +1389,55 @@ ul, ol {
 
   .tombol--nav { display: inline-flex; }
 
+  /* Panel menu hanya untuk layar sempit; di desktop tautan kembali
+     menjadi satu baris tanpa permukaan sendiri. display !important
+     membatalkan atribut hidden bila jendela diperbesar saat menu terbuka. */
   .situs-nav {
     order: 0;
     flex-basis: auto;
     display: block !important;
+    margin-top: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
   }
 
   .situs-nav ul {
     flex-direction: row;
+    flex-wrap: wrap;
     gap: var(--sela-1) 36px;
     padding: 0;
+  }
+
+  .situs-nav a {
+    display: inline-block;
+    min-height: 0;
+    padding-inline: 0;
+    border-radius: 0;
+    color: var(--tinta);
+  }
+
+  .situs-nav a:hover,
+  .situs-nav a[aria-current] { background-color: transparent; }
+
+  /* "Garis aktif" Figma 855:234: batang 24 x 3 bersudut penuh, di tengah,
+     6px di bawah label. Di Figma keadaan ini disembunyikan pada hero. */
+  .situs-nav a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 26px;
+    width: 24px;
+    height: 3px;
+    margin-left: -12px;
+    border-radius: 999px;
+    background-color: transparent;
+  }
+
+  .situs-nav a:hover::after,
+  .situs-nav a[aria-current]::after {
+    background-color: var(--kuning);
   }
 
   .bagian-isi--dua-kolom {
