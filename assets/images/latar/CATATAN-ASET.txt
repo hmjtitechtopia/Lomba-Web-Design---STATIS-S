@@ -1,0 +1,18 @@
+Latar hero diekspor dari Figma "Desain Web" (file LeSiMlDeTw813UGPTp2aZw),
+node 855:120 (desktop 1440 x 960).
+
+  langit.svg         1440 x 700  — node 855:121
+  matahari.svg        320 x 320  — node 855:123
+  awan-camar.svg     1440 x 420  — node 855:128
+  pulau-pesisir.svg  1440 x 260  — node 855:148
+  laut.svg           1440 x 270  — node 855:155
+
+Semuanya preserveAspectRatio="none": memang diregangkan mengikuti panggung,
+sama seperti di Figma.
+
+Panggung hero memakai SATU set persentase untuk kedua breakpoint karena
+frame desktop (1440 x 960) dan frame mobile (720 x 480, node 855:571)
+sama-sama berasio 3:2. Persennya ada di css/main.css bagian 6.
+
+Lima SVG ombak di ../parallax/ TIDAK dipakai hero maupun bagian 03 setelah
+desain Figma dipasang; berkasnya dibiarkan utuh sesuai permintaan.

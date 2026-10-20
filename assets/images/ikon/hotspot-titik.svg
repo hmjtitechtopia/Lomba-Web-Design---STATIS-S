@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Hotspot/Titik">
+<circle id="Cincin luar" cx="22" cy="22" r="22" fill="#E8A91C"/>
+<circle id="Cincin tengah" cx="22" cy="22" r="15" fill="#E8A91C"/>
+<path id="Titik" d="M29.5 22C29.5 26.1421 26.1421 29.5 22 29.5C17.8579 29.5 14.5 26.1421 14.5 22C14.5 17.8579 17.8579 14.5 22 14.5C26.1421 14.5 29.5 17.8579 29.5 22Z" fill="#E8A91C" stroke-width="3" stroke="#FAF3E3"/>
+</g>
+</svg>

@@ -1,0 +1,23 @@
+Aset kapal diekspor dari Figma "Desain Web" (file LeSiMlDeTw813UGPTp2aZw).
+
+  kapal-jong.svg          760 x 520  — hero, node 855:198
+  kapal-jong-bagian.svg   760 x 520  — bagian 03, node 855:291 (termasuk cadik)
+
+Keduanya memakai preserveAspectRatio="none" dan memang diregangkan
+mengikuti kotak seperti di Figma.
+
+Posisi hotspot pada bagian 03 ditulis sebagai persen terhadap gambar kapal
+di index.html. Nilainya diukur dari koordinat Figma dan kebetulan sama
+persis di frame desktop maupun mobile:
+
+  Layar    --x 32.9%  --y 44.2%
+  Tiang    --x 48.2%  --y 30.8%
+  Lambung  --x 57.9%  --y 73.8%
+  Cadik    --x 21.1%  --y 85.0%
+
+Catatan isi: istilah "cadik" sudah digambar Arla di Figma tetapi BELUM
+didukung sumber di BLUEPRINT_KIT/02_KONTEN_DAN_SUMBER.md. Periksa istilah
+dan fungsinya sebelum presentasi.
+
+Kalau ekspor kapal diganti, ukur ulang keempat persen di atas terhadap
+berkas baru.

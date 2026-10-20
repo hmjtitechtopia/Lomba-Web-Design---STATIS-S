@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1440" height="260" viewBox="0 0 1440 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Pulau dan pesisir" clip-path="url(#clip0_0_123)">
+<path id="Vector" d="M0 260V196C80 160 170 150 260 188C330 218 390 196 460 176C530 156 600 168 660 200L700 260H0Z" fill="#A9D0CE"/>
+<path id="Vector_2" d="M760 260C800 214 880 186 960 184C1050 182 1130 206 1200 214C1280 222 1360 200 1440 176V260H760Z" fill="#A9D0CE"/>
+<path id="Vector_3" d="M0 260V222C110 204 210 212 320 230C430 248 520 228 600 224L640 260H0Z" fill="#6FAAAA" fill-opacity="0.9"/>
+<path id="Vector_4" d="M980 260C1040 232 1130 222 1220 232C1310 242 1380 236 1440 222V260H980Z" fill="#6FAAAA" fill-opacity="0.9"/>
+<path id="Vector_5" d="M0 260V236C20 220 44 222 60 236C76 216 106 216 122 238C140 224 166 226 180 244L196 260H0Z" fill="#3F8387"/>
+<path id="Vector_6" d="M1300 260V244C1320 228 1344 230 1360 244C1376 226 1404 228 1420 246L1440 240V260H1300Z" fill="#3F8387"/>
+</g>
+<defs>
+<clipPath id="clip0_0_123">
+<rect width="1440" height="260" fill="white"/>
+</clipPath>
+</defs>
+</svg>

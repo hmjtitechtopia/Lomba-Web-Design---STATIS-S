@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1440" height="80" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Transisi 02&#226;&#134;&#146;03" clip-path="url(#clip0_0_4)">
+<path id="Vector" d="M1440 0H0V80H1440V0Z" fill="#FAF3E3"/>
+<path id="Vector_2" d="M0 40C60 28 120 28 180 40C240 52 300 52 360 40C420 28 480 28 540 40C600 52 660 52 720 40C780 28 840 28 900 40C960 52 1020 52 1080 40C1140 28 1200 28 1260 40C1320 52 1380 52 1440 40V80H0V40Z" fill="#CDE6E6"/>
+</g>
+<defs>
+<clipPath id="clip0_0_4">
+<rect width="1440" height="80" fill="white"/>
+</clipPath>
+</defs>
+</svg>
