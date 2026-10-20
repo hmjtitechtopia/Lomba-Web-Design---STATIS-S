@@ -44,6 +44,12 @@
    2. Gerak kecil pada kontrol
    -------------------------------------------------------------------------- */
 
+/* Bilah navigasi memudar masuk saat pengunjung mulai menggulir.
+   Aturan prefers-reduced-motion di bawah memadamkannya. */
+.situs-header::before {
+  transition: opacity 180ms ease-out;
+}
+
 .tombol,
 .chip,
 .hotspot,

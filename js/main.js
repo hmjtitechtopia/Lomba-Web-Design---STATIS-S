@@ -111,6 +111,24 @@ function pasangTombolMenu() {
   });
 }
 
+/* Header kini fixed, jadi ia butuh permukaan sendiri begitu pengunjung
+   menggulir — tanpa itu tautan melayang di atas isi bagian. Keadaan ini
+   dibaca dari penanda 1px di puncak halaman memakai IntersectionObserver,
+   bukan pendengar scroll kedua. */
+function pasangHeaderTertempel() {
+  const header = document.querySelector('.situs-header');
+  const penanda = document.querySelector('#penanda-atas');
+
+  if (!header || !penanda) return;
+
+  const pengamat = new IntersectionObserver(([entri]) => {
+    header.classList.toggle('situs-header--tertempel', !entri.isIntersecting);
+  });
+
+  pengamat.observe(penanda);
+}
+
+pasangHeaderTertempel();
 pasangTombolMenu();
 pasangPenandaBagian();
 pasangParallax();

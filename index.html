@@ -15,6 +15,12 @@
   <body>
     <a class="lewati-nav" href="#konten">Lewati ke konten utama</a>
 
+    <!-- Penanda setinggi 1px di puncak halaman. js/main.js mengamatinya
+         dengan IntersectionObserver untuk tahu kapan header harus berubah
+         jadi bilah padat — lebih murah daripada menambah pendengar scroll
+         kedua, dan tetap bekerja saat prefers-reduced-motion aktif. -->
+    <span class="penanda-atas" id="penanda-atas" aria-hidden="true"></span>
+
     <!-- Navigasi — Figma 855:224 (desktop) dan 855:675 (mobile).
          Desktop: logo, empat tautan, Tombol/Nav. Mobile: logo + tombol menu. -->
     <header class="situs-header">

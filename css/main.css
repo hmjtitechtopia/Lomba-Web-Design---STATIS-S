@@ -57,6 +57,9 @@
   --sudut-pil: 999px;
 
   --tinggi-transisi: 48px;
+
+  /* Tinggi bilah navigasi: Figma mobile 44 + margin 20/20 = 84. */
+  --tinggi-header: 84px;
 }
 
 /* --------------------------------------------------------------------------
@@ -179,14 +182,28 @@ ul, ol {
    3. Header
    -------------------------------------------------------------------------- */
 
-/* Navigasi — Figma 855:224 (1280 x 56 pada margin 80/36) dan 855:675
-   (mobile 350 x 44 pada margin 20/20). Header melayang di atas hero,
-   jadi posisinya absolut dan tingginya tidak menambah tinggi hero. */
-.situs-header {
+/* Penanda puncak halaman; tidak pernah terlihat. */
+.penanda-atas {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* Navigasi — Figma 855:224 (1280 x 56 pada margin 80/36) dan 855:675
+   (mobile 350 x 44 pada margin 20/20).
+
+   position: fixed, bukan sticky: di Figma navigasi berada DI DALAM frame
+   hero dan menumpang di atas ilustrasi. Sticky menuntut header ikut alur
+   dokumen, yang akan mendorong hero turun 84/128px dan merusak tinggi
+   hero yang sudah pas dengan Figma. Dengan fixed, posisinya saat gulir 0
+   sama persis seperti sebelumnya, tetapi tetap terlihat saat menggulir. */
+.situs-header {
+  position: fixed;
   inset-inline: 0;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   display: flex;
   /* Wajib: tanpa ini daftar tautan yang ber-flex-basis 100% ikut berebut
      ruang di baris yang sama, menjepit logo dan menindih judul hero. */
@@ -197,9 +214,29 @@ ul, ol {
   max-width: var(--lebar-maks);
   margin: 0 auto;
   /* Figma mobile: baris navigasi 44px pada margin 20 → tinggi total 84. */
-  min-height: 84px;
+  min-height: var(--tinggi-header);
   padding: 20px;
 }
+
+/* Bilah padat saat pengunjung sudah menggulir. Figma tidak punya frame
+   header dalam keadaan tergulir, jadi permukaannya keputusan
+   implementasi: Layar + garis Pasir, mengikuti bahasa visual kartu.
+   Dipasang sebagai ::before yang ikut fixed supaya bilahnya selebar
+   layar penuh, sementara isi header tetap dibatasi 1440 dan di tengah. */
+.situs-header::before {
+  content: "";
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: -1;
+  height: var(--tinggi-header);
+  background-color: var(--layar);
+  border-bottom: 1px solid var(--pasir);
+  box-shadow: 0 8px 24px rgba(18, 38, 43, 0.08);
+  opacity: 0;
+}
+
+.situs-header--tertempel::before { opacity: 1; }
 
 .situs-merek {
   display: inline-flex;
@@ -272,9 +309,11 @@ ul, ol {
    4. Kerangka bagian dan latar berselang
    -------------------------------------------------------------------------- */
 
+/* scroll-margin-top menahan judul bagian agar tidak tertutup bilah
+   navigasi yang kini fixed. */
 .bagian {
   padding: var(--sela-5) 0;
-  scroll-margin-top: var(--sela-3);
+  scroll-margin-top: var(--tinggi-header);
 }
 
 .bagian-isi {
@@ -1373,6 +1412,8 @@ ul, ol {
     --ukuran-isi: 16px;       /* Body/Base    16/26 */
     --tinggi-isi: 26px;
     --tinggi-transisi: 80px;
+    /* Figma desktop: baris 56 + margin 36/36 = 128. */
+    --tinggi-header: 128px;
   }
 
   .bagian-isi,
@@ -1380,7 +1421,7 @@ ul, ol {
 
   /* Figma 855:224: baris 1280 x 56 pada margin 80/36 → tinggi total 128. */
   .situs-header {
-    min-height: 128px;
+    min-height: var(--tinggi-header);
     padding: 36px 80px;
   }
 
