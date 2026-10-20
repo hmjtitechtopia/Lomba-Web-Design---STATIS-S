@@ -218,9 +218,16 @@ ul, ol {
   padding: 20px;
 }
 
-/* Bilah padat saat pengunjung sudah menggulir. Figma tidak punya frame
-   header dalam keadaan tergulir, jadi permukaannya keputusan
-   implementasi: Layar + garis Pasir, mengikuti bahasa visual kartu.
+/* Bilah kaca buram saat pengunjung sudah menggulir. Figma tidak punya
+   frame header dalam keadaan tergulir, jadi permukaannya keputusan
+   implementasi.
+
+   Latarnya tembus pandang dan isi di belakangnya diburamkan
+   (backdrop-filter), bukan blok warna padat. Tintnya TIDAK nol: isi yang
+   lewat di bawah bilah berganti dari krem terang (bagian 02, 05, 06) ke
+   Teluk biru tua (bagian 04 dan footer), sedangkan tautan memakai warna
+   Tinta yang gelap. Tanpa tint, tautan hilang di atas bagian gelap.
+
    Dipasang sebagai ::before yang ikut fixed supaya bilahnya selebar
    layar penuh, sementara isi header tetap dibatasi 1440 dan di tengah. */
 .situs-header::before {
@@ -230,10 +237,20 @@ ul, ol {
   top: 0;
   z-index: -1;
   height: var(--tinggi-header);
-  background-color: var(--layar);
-  border-bottom: 1px solid var(--pasir);
-  box-shadow: 0 8px 24px rgba(18, 38, 43, 0.08);
+  background-color: color-mix(in srgb, var(--layar) 72%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid color-mix(in srgb, var(--pasir) 70%, transparent);
+  box-shadow: 0 8px 24px rgba(18, 38, 43, 0.06);
   opacity: 0;
+}
+
+/* Peramban tanpa backdrop-filter tidak dapat efek buram, jadi tintnya
+   dinaikkan supaya kontras tautan tetap aman. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .situs-header::before {
+    background-color: color-mix(in srgb, var(--layar) 94%, transparent);
+  }
 }
 
 .situs-header--tertempel::before { opacity: 1; }
