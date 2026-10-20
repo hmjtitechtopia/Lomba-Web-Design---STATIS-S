@@ -5,22 +5,475 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jong Batam</title>
 
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
-        }
-      }
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Figtree:wght@400;500;600&display=swap">
 
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/motion.css">
   </head>
   <body>
-    <script type="module" src="./js/jong-3d.js"></script>
+    <a class="lewati-nav" href="#konten">Lewati ke konten utama</a>
+
+    <!-- Navigasi — Figma 855:224 (desktop) dan 855:675 (mobile).
+         Desktop: logo, empat tautan, Tombol/Nav. Mobile: logo + tombol menu. -->
+    <header class="situs-header">
+      <a class="situs-merek" href="#atas">
+        <img class="situs-merek__ikon" src="./assets/images/ikon/jong.svg"
+             alt="" width="30" height="30">
+        Jong Batam
+      </a>
+
+      <nav class="situs-nav" id="situs-nav" aria-label="Bagian halaman">
+        <ul>
+          <li><a href="#kenali">Kenali Jong</a></li>
+          <li><a href="#bagian">Bagian Perahu</a></li>
+          <li><a href="#coba-angin">Coba Angin</a></li>
+          <li><a href="#nilai">Nilai Budaya</a></li>
+        </ul>
+      </nav>
+
+      <a class="tombol tombol--garis tombol--nav" href="#coba-angin">
+        Coba arah angin
+        <img class="tombol__ikon" src="./assets/images/ikon/panah-kanan.svg"
+             alt="" width="20" height="20">
+      </a>
+
+      <!-- Tombol menu hanya tampil di layar sempit (Figma 855:682). -->
+      <button type="button" class="tombol-menu" id="tombol-menu"
+              aria-controls="situs-nav" aria-expanded="false">
+        <span class="hanya-pembaca-layar">Buka menu bagian halaman</span>
+        <span class="tombol-menu__garis" aria-hidden="true"></span>
+        <span class="tombol-menu__garis" aria-hidden="true"></span>
+        <span class="tombol-menu__garis" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <main id="konten">
+
+      <!-- 01 — Hero -->
+      <section class="bagian bagian--hero" id="atas" aria-labelledby="judul-hero">
+
+        <!-- Panggung ilustrasi — Figma 855:120 (1440 x 960) dan 855:571
+             (mobile: adegan yang sama pada skala 0.5, 720 x 480).
+
+             Karena kedua frame berasio 3:2, SATU set persentase memosisikan
+             semua lapisan di dua breakpoint sekaligus; yang berubah hanya
+             ukuran dan letak panggungnya. Urutan DOM = urutan lapisan,
+             belakang ke depan, jadi tidak perlu z-index manual.
+
+             data-geser-* dibaca js/parallax.js (tugas terpisah); nilainya
+             tidak mengubah tata letak diam yang dinilai terhadap Figma. -->
+        <div class="hero-panggung" id="hero-panggung" data-adegan="hero" aria-hidden="true">
+          <img class="lapis lapis--langit" src="./assets/images/latar/langit.svg"
+               alt="" width="1440" height="700" data-geser-y="0.01">
+          <img class="lapis lapis--matahari" src="./assets/images/latar/matahari.svg"
+               alt="" width="320" height="320" data-geser-y="0.02">
+          <img class="lapis lapis--awan" src="./assets/images/latar/awan-camar.svg"
+               alt="" width="1440" height="420" data-geser-y="0.03" data-lapis-opsional="ya">
+          <img class="lapis lapis--pulau" src="./assets/images/latar/pulau-pesisir.svg"
+               alt="" width="1440" height="260" data-geser-y="0.04">
+          <img class="lapis lapis--laut" src="./assets/images/latar/laut.svg"
+               alt="" width="1440" height="270" data-geser-y="0.05">
+          <img class="lapis lapis--kapal" src="./assets/images/kapal/kapal-jong.svg"
+               alt="" width="760" height="520" data-geser-y="0.07">
+        </div>
+
+        <div class="hero-teks">
+          <h1 id="judul-hero">Kenali Jong, perahu layar dari pesisir Batam.</h1>
+          <p class="hero-kalimat">
+            Lihat bagian-bagiannya, lalu coba bagaimana arah angin mengubah geraknya.
+          </p>
+          <a class="tombol tombol--utama" href="#kenali">
+            Mulai menjelajah
+            <img class="tombol__ikon" src="./assets/images/ikon/panah-kanan.svg"
+                 alt="" width="20" height="20">
+          </a>
+        </div>
+      </section>
+
+      <div class="transisi transisi--01-ke-02" aria-hidden="true"></div>
+
+      <!-- 02 — Kenali Jong (Figma 855:272 / 855:690).
+           Urutan DOM mengikuti frame mobile: eyebrow, judul, dua paragraf,
+           media, lalu sumber ringkas. Desktop memindahkan sumber ringkas
+           kembali ke kolom kiri lewat penempatan grid. -->
+      <section class="bagian bagian--terang bagian--kenali" id="kenali" aria-labelledby="judul-kenali">
+        <div class="bagian-isi kenali-tata">
+          <!-- Pembungkus kolom kiri. Di mobile ia display:contents sehingga
+               keenam elemen menjadi satu kolom seperti frame 855:690;
+               di desktop ia menjadi kolom kiri 570px. -->
+          <div class="kenali-kolom">
+            <p class="eyebrow">02 &middot; Kenali Jong</p>
+
+            <h2 id="judul-kenali">Apa itu Jong?</h2>
+
+            <p class="kenali-paragraf kenali-paragraf--satu">
+              Jong adalah perahu layar kecil tanpa awak yang dimainkan di pesisir.
+              Di Batam, permainan rakyat Melayu ini masih hadir lewat lomba dan
+              kegiatan masyarakat.
+            </p>
+
+            <!-- Penanda [PERLU SUMBER] dipertahankan dari isi proyek: kalimat
+                 ini belum punya rujukan di BLUEPRINT_KIT/02. Teks selebihnya
+                 mengikuti Figma. -->
+            <p class="kenali-paragraf kenali-paragraf--dua">
+              Pemain menyiapkan Jong, membaca arah angin, lalu melepaskannya di air.
+              [PERLU SUMBER]
+            </p>
+
+            <p class="sumber-ringkas">
+              Berdasarkan Dinas Kebudayaan Kepri dan Dispora Kota Batam.
+            </p>
+          </div>
+
+          <figure class="media-slot">
+            <div class="media-slot__kosong">
+              <p class="media-slot__label">Foto berizin atau ilustrasi</p>
+              <p class="media-slot__arahan">
+                Pemain melepas Jong di tepi pantai Batam, layar terkembang,
+                air dangkal di depan. Rasio 4:3.
+              </p>
+            </div>
+            <figcaption>
+              <span class="media-slot__judul">Dibuat, dilepas, lalu melaju bersama angin.</span>
+              <span class="media-slot__kredit">Foto: [nama fotografer] &middot; Lisensi: [jenis lisensi]</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+
+      <div class="transisi transisi--02-ke-03" aria-hidden="true"></div>
+
+      <!-- 03 — Bagian perahu -->
+      <section class="bagian bagian--ombak bagian--perahu" id="bagian" aria-labelledby="judul-bagian">
+        <div class="bagian-isi perahu-tata">
+          <p class="eyebrow">03 &middot; Bagian Perahu</p>
+          <h2 id="judul-bagian">Kenali setiap bagian Jong.</h2>
+
+          <!-- Teks Figma di sini berbunyi "Putar model, …"; sesuai keputusan
+               2D kalimat itu diganti pengantar berikut. -->
+          <p class="perahu-pengantar">
+            Pilih satu bagian di daftar, atau ketuk titik kuning pada ilustrasi.
+          </p>
+
+          <!-- Label "Pilih bagian" hanya ada pada frame desktop (855:343). -->
+          <p class="eyebrow perahu-label-chip" id="label-pilih-bagian">Pilih bagian</p>
+
+          <!-- Chip bagian — Figma 855:344 / 855:706. -->
+          <div class="chip-grup" role="group" aria-labelledby="label-pilih-bagian">
+            <button type="button" class="chip" data-bagian="layar" aria-pressed="true">
+              <img class="chip__titik" src="./assets/images/ikon/titik-chip.svg" alt="" width="8" height="8">
+              Layar
+            </button>
+            <button type="button" class="chip" data-bagian="tiang" aria-pressed="false">
+              <img class="chip__titik" src="./assets/images/ikon/titik-chip.svg" alt="" width="8" height="8">
+              Tiang
+            </button>
+            <button type="button" class="chip" data-bagian="lambung" aria-pressed="false">
+              <img class="chip__titik" src="./assets/images/ikon/titik-chip.svg" alt="" width="8" height="8">
+              Lambung
+            </button>
+            <button type="button" class="chip" data-bagian="cadik" aria-pressed="false">
+              <img class="chip__titik" src="./assets/images/ikon/titik-chip.svg" alt="" width="8" height="8">
+              Cadik
+            </button>
+          </div>
+
+          <!-- Panggung kapal. Hotspot adalah ANAK pembungkus kapal dan
+               diposisikan dalam persen terhadap gambar kapal, jadi titiknya
+               tetap menempel saat kapal diskalakan. Persennya diukur dari
+               Figma dan sama persis di frame desktop maupun mobile. -->
+          <div class="kapal-panggung">
+            <div class="kapal-bungkus" id="kapal-bungkus">
+              <img class="kapal-gambar" id="kapal-gambar"
+                   src="./assets/images/kapal/kapal-jong-bagian.svg"
+                   alt="Ilustrasi perahu Jong dengan layar, tiang, lambung, dan cadik"
+                   width="760" height="520">
+
+              <!-- Daftar mulai hidden; js/hotspot.js menampilkannya setelah
+                   gambar kapal benar-benar termuat, supaya tidak ada titik
+                   mengambang tanpa kapal.
+
+                   Catatan isi: istilah "cadik" belum didukung sumber di
+                   BLUEPRINT_KIT/02 meski sudah digambar Arla di Figma. -->
+              <ul class="hotspot-daftar" id="hotspot-daftar" hidden>
+                <li><button type="button" class="hotspot" data-bagian="layar"   aria-expanded="false" style="--x: 32.9%; --y: 44.2%"><span>Layar</span></button></li>
+                <li><button type="button" class="hotspot" data-bagian="tiang"   aria-expanded="false" style="--x: 48.2%; --y: 30.8%"><span>Tiang</span></button></li>
+                <li><button type="button" class="hotspot" data-bagian="lambung" aria-expanded="false" style="--x: 57.9%; --y: 73.8%"><span>Lambung</span></button></li>
+                <li><button type="button" class="hotspot" data-bagian="cadik"   aria-expanded="false" style="--x: 21.1%; --y: 85.0%"><span>Cadik</span></button></li>
+              </ul>
+
+              <!-- Label kecil di samping titik yang sedang tidak aktif.
+                   Hanya ada pada frame desktop (855:323, 855:326, 855:355). -->
+              <p class="label-bagian" data-bagian="tiang"   style="--x: 51.8%; --y: 27.7%">Tiang</p>
+              <p class="label-bagian" data-bagian="lambung" style="--x: 61.6%; --y: 70.8%">Lambung</p>
+              <p class="label-bagian" data-bagian="cadik"   style="--x: 9.5%;  --y: 81.7%">Cadik</p>
+            </div>
+          </div>
+
+          <!-- Kartu bagian — Figma 855:334 (desktop) dan 855:756 (sheet mobile).
+               Penghubung ke titik hotspot hanya digambar Figma untuk keadaan
+               "Layar", jadi hanya tampil saat bagian itu yang aktif. -->
+          <article class="kartu-bagian" id="kartu-bagian" aria-live="polite">
+            <span class="kartu-bagian__pegangan" aria-hidden="true"></span>
+            <p class="kartu-bagian__hitung">Bagian <span id="kartu-indeks">1</span> dari 4</p>
+            <h3 class="kartu-bagian__judul" id="kartu-judul">Layar</h3>
+            <p class="kartu-bagian__isi" id="kartu-isi">
+              Menangkap tiupan angin dan mengubahnya menjadi dorongan.
+            </p>
+            <div class="kartu-bagian__navigasi">
+              <button type="button" class="tautan-aksi tautan-aksi--mundur" id="kartu-sebelumnya">
+                <span aria-hidden="true">&larr;</span> Sebelumnya
+              </button>
+              <button type="button" class="tautan-aksi" id="kartu-berikutnya">
+                Berikutnya: <span id="kartu-berikutnya-nama">Tiang</span>
+                <span aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+          </article>
+
+          <div class="perahu-dasar-laut" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <div class="transisi transisi--03-ke-04" aria-hidden="true"></div>
+
+      <!-- 04 — Angin dan Jong (Figma 855:360 / 855:765).
+           Satu kartu diagram berisi tiga simpul; desktop menyusunnya
+           mendatar dengan panah "→", mobile menurun dengan panah "↓". -->
+      <section class="bagian bagian--teluk bagian--angin-jong" id="angin-jong" aria-labelledby="judul-angin-jong">
+        <div class="bagian-isi angin-jong-tata">
+          <p class="eyebrow eyebrow--terang">04 &middot; Angin dan Jong</p>
+          <h2 id="judul-angin-jong">Arah angin memengaruhi gerak Jong.</h2>
+          <p class="angin-jong-pengantar">
+            Angin mendorong layar, dan posisi layar menentukan ke mana Jong bergerak.
+          </p>
+
+          <ol class="alur-kartu">
+            <li class="alur-kartu__item alur-kartu__item--satu">
+              <p class="alur-kartu__nomor" aria-hidden="true">01</p>
+              <div class="alur-kartu__teks">
+                <h3 class="alur-kartu__judul">Arah angin</h3>
+                <p class="alur-kartu__isi">Tiupan datang dari depan, samping, atau belakang.</p>
+              </div>
+            </li>
+
+            <li class="alur-kartu__panah" aria-hidden="true"></li>
+
+            <li class="alur-kartu__item alur-kartu__item--dua">
+              <p class="alur-kartu__nomor" aria-hidden="true">02</p>
+              <div class="alur-kartu__teks">
+                <h3 class="alur-kartu__judul">Layar</h3>
+                <p class="alur-kartu__isi">Menerima dorongan sesuai posisinya.</p>
+              </div>
+            </li>
+
+            <li class="alur-kartu__panah" aria-hidden="true"></li>
+
+            <li class="alur-kartu__item alur-kartu__item--tiga">
+              <p class="alur-kartu__nomor" aria-hidden="true">03</p>
+              <div class="alur-kartu__teks">
+                <h3 class="alur-kartu__judul">Respons Jong</h3>
+                <!-- Figma menulis "Arah dan laju Jong ikut berubah."; kata
+                     "laju" sengaja diganti "gerak" mengikuti keputusan isi
+                     proyek (dokumen 01 dan 03: tanpa kesan angka kecepatan). -->
+                <p class="alur-kartu__isi">Arah dan gerak Jong ikut berubah.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="transisi transisi--04-ke-05" aria-hidden="true"></div>
+
+      <!-- 05 — Coba arah angin (Figma 855:388 / 855:792).
+           Panggung ilustrasi dari Figma + panel kontrol. Figma hanya
+           menggambar SATU keadaan angin ("Samping"), jadi label arah dan
+           penjelasan tetap digerakkan js/arah-angin.js. -->
+      <section class="bagian bagian--terang bagian--angin" id="coba-angin" aria-labelledby="judul-coba-angin">
+        <div class="bagian-isi angin-tata">
+          <div class="angin-kepala">
+            <p class="eyebrow">05 &middot; Coba arah angin</p>
+            <h2 id="judul-coba-angin">Coba arah angin.</h2>
+            <p class="angin-pengantar">
+              Pilih dari mana angin bertiup, lalu lihat perubahan layar dan arah Jong.
+            </p>
+          </div>
+
+          <div class="angin-area">
+            <figure class="angin-panggung" id="angin-panggung">
+              <img class="angin-panggung__gambar"
+                   src="./assets/images/angin/panggung-angin.svg"
+                   alt="Pandang atas: arah angin terhadap perahu Jong"
+                   width="820" height="640">
+
+              <!-- Label melayang di atas ilustrasi (Figma 855:505 dan 855:507).
+                   Posisinya persen terhadap panggung 820 x 640. -->
+              <p class="angin-label angin-label--angin" id="angin-label-arah">Angin</p>
+              <p class="angin-label angin-label--gerak" id="angin-label-gerak">Lurus ke depan</p>
+
+              <figcaption class="angin-legenda">
+                <span class="angin-legenda__item">
+                  <img src="./assets/images/ikon/legenda-angin.svg" alt="" width="28" height="10">
+                  Angin
+                </span>
+                <span class="angin-legenda__item">
+                  <img src="./assets/images/ikon/legenda-gerak.svg" alt="" width="28" height="10">
+                  Gerak perahu
+                </span>
+              </figcaption>
+            </figure>
+
+            <div class="angin-panel">
+              <h3 class="angin-panel__judul" id="judul-pilihan-angin">Angin datang dari&hellip;</h3>
+
+              <div class="angin-pilihan" role="group" aria-labelledby="judul-pilihan-angin">
+                <button type="button" class="tombol tombol--pilihan" data-angin="depan" aria-pressed="false">Depan</button>
+                <button type="button" class="tombol tombol--pilihan" data-angin="samping" aria-pressed="false">Samping</button>
+                <button type="button" class="tombol tombol--pilihan" data-angin="belakang" aria-pressed="false">Belakang</button>
+              </div>
+
+              <hr class="angin-pemisah">
+
+              <div class="angin-penjelasan" aria-live="polite">
+                <h4 class="angin-penjelasan__judul" id="angin-judul">Belum ada arah yang dipilih</h4>
+                <p class="angin-penjelasan__isi" id="angin-isi">
+                  Pilih salah satu arah di atas untuk melihat penjelasannya.
+                </p>
+              </div>
+
+              <p class="angin-catatan">
+                <img class="angin-catatan__ikon" src="./assets/images/ikon/info.svg"
+                     alt="" width="20" height="20">
+                Ilustrasi ini membantu memahami konsep, bukan menghitung gerak
+                perahu sebenarnya.
+              </p>
+
+              <button type="button" class="tombol tombol--utama tombol--lebar" id="angin-ulang">
+                Coba arah lain
+                <img class="tombol__ikon" src="./assets/images/ikon/panah-kanan.svg"
+                     alt="" width="20" height="20">
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 — Nilai budaya (Figma 855:525 / 855:925). -->
+      <section class="bagian bagian--terang bagian--nilai" id="nilai" aria-labelledby="judul-nilai">
+        <div class="bagian-isi nilai-tata">
+          <div class="nilai-kolom">
+            <p class="eyebrow">06 &middot; Nilai Budaya</p>
+            <h2 id="judul-nilai">Jong di Batam hari ini.</h2>
+            <p class="nilai-paragraf">
+              Salah satu contohnya adalah Lomba Jong Batam 2019. [Isi dari sumber
+              Dispora: penyelenggara, lokasi, dan cara lomba berlangsung.] Dari
+              kegiatan ini terlihat keterampilan membuat perahu dan kebiasaan
+              membaca angin yang dipelajari bersama di pesisir.
+            </p>
+          </div>
+
+          <!-- Kartu fakta (855:529): slot foto 16:9 lalu daftar fakta. -->
+          <div class="kartu-fakta">
+            <div class="kartu-fakta__slot">
+              <p class="media-slot__label">Foto kegiatan berlisensi</p>
+              <p class="kartu-fakta__arahan">
+                Peserta dan Jong di garis start Lomba Jong Batam. Sertakan nama
+                fotografer dan lisensi.
+              </p>
+            </div>
+
+            <div class="kartu-fakta__isi">
+              <dl class="kartu-fakta__daftar">
+                <div class="kartu-fakta__baris">
+                  <dt>Kegiatan</dt>
+                  <dd>Lomba Jong Batam</dd>
+                </div>
+                <div class="kartu-fakta__baris">
+                  <dt>Tahun</dt>
+                  <dd>2019</dd>
+                </div>
+                <div class="kartu-fakta__baris">
+                  <!-- Figma masih "[isi dari sumber]"; nilai di bawah sudah
+                       terisi dari pemberitaan Media Center Batam 2019. -->
+                  <dt>Lokasi</dt>
+                  <dd>Tanjung Mak Dara, Kampung Melayu, Batu Besar, Nongsa</dd>
+                </div>
+                <div class="kartu-fakta__baris">
+                  <dt>Nilai yang tampak</dt>
+                  <dd>[isi dari sumber]</dd>
+                </div>
+              </dl>
+
+              <p class="kartu-fakta__sumber">
+                Sumber:
+                <a href="https://dispora.batam.go.id/2019/04/16/lomba-jong-batam-2019-lestarikan-permainan-tradisional-melayu/"
+                   rel="noopener" target="_blank">Dispora Kota Batam &middot; Lomba Jong Batam 2019 <span aria-hidden="true">&#8599;</span></a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 07 — Penutup dan footer (Figma 855:548 / 855:948). -->
+    <footer class="situs-footer" id="sumber">
+      <h2 class="hanya-pembaca-layar">Sumber, kredit, dan tim</h2>
+
+      <div class="footer-kolom">
+        <section class="footer-kolom__item" aria-labelledby="judul-sumber-info">
+          <h3 class="eyebrow eyebrow--terang" id="judul-sumber-info">Sumber informasi</h3>
+          <ul class="footer-daftar">
+            <li>
+              <a href="https://mediacenter.batam.go.id/2019/03/14/lomba-jong-dukung-wisata-lokal/"
+                 rel="noopener" target="_blank">Media Center Batam &middot; Lomba Jong Dukung Wisata Lokal, 2019 <span aria-hidden="true">&#8599;</span></a>
+            </li>
+            <li>
+              <a href="https://dispora.batam.go.id/2019/04/16/lomba-jong-batam-2019-lestarikan-permainan-tradisional-melayu/"
+                 rel="noopener" target="_blank">Dispora Kota Batam &middot; Lomba Jong Batam 2019 <span aria-hidden="true">&#8599;</span></a>
+            </li>
+            <li>
+              <a href="https://mediacenter.batam.go.id/2020/11/02/perkuat-aspek-budaya-lewat-lomba-jong/"
+                 rel="noopener" target="_blank">Media Center Batam &middot; Perkuat Aspek Budaya Lewat Lomba Jong, 2020 <span aria-hidden="true">&#8599;</span></a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="footer-kolom__item" aria-labelledby="judul-kredit">
+          <h3 class="eyebrow eyebrow--terang" id="judul-kredit">Kredit</h3>
+          <!-- Figma masih mencantumkan "Model 3D: Zaim"; kredit di bawah
+               mengikuti keputusan 2D (model GLB tidak dipakai di website). -->
+          <ul class="footer-daftar">
+            <li>Ilustrasi kapal dan ombak: Arla</li>
+            <li>Antarmuka dan desain halaman: Arla</li>
+            <li>Kode dan implementasi: Rahmad</li>
+            <li>Huruf: Fraunces dan Figtree &middot; SIL Open Font License</li>
+            <li>Pustaka JavaScript/CSS: tidak ada</li>
+            <li>Foto: [nama fotografer] &middot; [lisensi]</li>
+          </ul>
+        </section>
+
+        <section class="footer-kolom__item" aria-labelledby="judul-tim">
+          <h3 class="eyebrow eyebrow--terang" id="judul-tim">Tim</h3>
+          <ul class="footer-daftar">
+            <li>Rahmad &mdash; kode dan parallax</li>
+            <li>Arla &mdash; desain dan ilustrasi</li>
+            <li>Zaim &mdash; [peran]</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="footer-bawah">
+        <p>Jong Batam &middot; [nama sekolah / kelas] &middot; 2026</p>
+        <a href="#atas">Kembali ke atas <span aria-hidden="true">&uarr;</span></a>
+      </div>
+    </footer>
+
+    <!-- Satu titik masuk. main.js memanggil modul parallax, hotspot,
+         dan arah angin; lihat js/main.js. -->
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>
