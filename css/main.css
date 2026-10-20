@@ -1,0 +1,1761 @@
+/* ==========================================================================
+   Jong Batam — gaya dasar, token, tata letak
+   Mengikuti Figma "Alur satu halaman — Desktop v3 (polish)" dan "Mobile v3".
+   Gerak, parallax, dan prefers-reduced-motion ada di css/motion.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Token
+   -------------------------------------------------------------------------- */
+
+:root {
+  --teluk: #0E3B43;
+  --laut: #1F6F78;
+  --ombak: #8CC5C3;
+  --langit: #CDE6E6;
+  --fajar: #F8EAD0;
+  --layar: #FAF3E3;
+  --pasir: #EDE2CB;
+  --kuning: #E8A91C;
+  --kuning-tua: #8F5C00;
+  --bata: #B6452C;
+  --tinta: #12262B;
+  --putih: #FFFFFF;
+
+  --huruf-judul: "Fraunces", Georgia, serif;
+  --huruf-isi: "Figtree", system-ui, sans-serif;
+
+  /* Skala mobile (Figma Mobile/*: 42 · 34 · 17); ditimpa pada breakpoint
+     di bawah. Tinggi baris ikut text style Figma, bukan kelipatan bebas. */
+  --ukuran-judul-1: 42px;   /* Mobile/Display  42/46 */
+  --tinggi-judul-1: 46px;
+  --ukuran-judul-2: 34px;   /* Mobile H2       34/40 */
+  --tinggi-judul-2: 40px;
+  --ukuran-judul-3: 22px;   /* Heading/H4      22/28 */
+  --tinggi-judul-3: 28px;
+  --ukuran-sorot: 20px;     /* Body/Large      20/30 */
+  --tinggi-sorot: 30px;
+  --ukuran-isi: 17px;       /* Mobile/Body-Large 17/27 */
+  --tinggi-isi: 27px;
+  --ukuran-label: 16px;     /* Label/Button, Label/Nav 16/20 */
+  --ukuran-kecil: 14px;     /* Body/Small      14/22 */
+  --tinggi-kecil: 22px;
+  --ukuran-halus: 13px;
+
+  --sela-1: 8px;
+  --sela-2: 16px;
+  --sela-3: 24px;
+  --sela-4: 40px;
+  --sela-5: 72px;
+
+  /* Figma: kanvas 1440 dengan margin 80 (isi 1280); mobile 390 dengan
+     margin 20 (isi 350). Lebar maks mencakup padding (box-sizing: border-box). */
+  --lebar-maks: 1440px;
+  --lebar-teks: 62ch;
+  --sudut: 16px;
+  --sudut-besar: 24px;
+  --sudut-pil: 999px;
+
+  --tinggi-transisi: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Dasar
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--layar);
+  color: var(--tinta);
+  font-family: var(--huruf-isi);
+  font-size: var(--ukuran-isi);
+  line-height: var(--tinggi-isi);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Fraunces di Figma memakai sumbu variabel SOFT 0 / WONK 1. */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--huruf-judul);
+  font-weight: 600;
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+  color: var(--teluk);
+  margin: 0 0 var(--sela-2);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--ukuran-judul-1);
+  line-height: var(--tinggi-judul-1);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: var(--ukuran-judul-2);
+  line-height: var(--tinggi-judul-2);
+  letter-spacing: -0.005em;
+}
+
+h3 {
+  font-size: var(--ukuran-judul-3);
+  line-height: var(--tinggi-judul-3);
+}
+
+h4 {
+  font-size: var(--ukuran-sorot);
+  line-height: var(--tinggi-sorot);
+}
+
+p {
+  margin: 0 0 var(--sela-2);
+  max-width: var(--lebar-teks);
+}
+
+a {
+  color: var(--laut);
+  text-underline-offset: 3px;
+}
+
+a:hover { color: var(--teluk); }
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Perlu !important: sebagian kelas di bawah memakai display flex/grid. */
+[hidden] { display: none !important; }
+
+:focus-visible {
+  outline: 3px solid var(--kuning-tua);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.hanya-pembaca-layar {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.lewati-nav {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: var(--sela-1) var(--sela-2);
+  background-color: var(--kuning);
+  color: var(--tinta);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lewati-nav:focus {
+  left: var(--sela-2);
+  top: var(--sela-2);
+}
+
+/* --------------------------------------------------------------------------
+   3. Header
+   -------------------------------------------------------------------------- */
+
+/* Navigasi — Figma 855:224 (1280 x 56 pada margin 80/36) dan 855:675
+   (mobile 350 x 44 pada margin 20/20). Header melayang di atas hero,
+   jadi posisinya absolut dan tingginya tidak menambah tinggi hero. */
+.situs-header {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sela-2);
+  max-width: var(--lebar-maks);
+  margin: 0 auto;
+  /* Figma mobile: baris navigasi 44px pada margin 20 → tinggi total 84. */
+  min-height: 84px;
+  padding: 20px;
+}
+
+.situs-merek {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--huruf-judul);
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+  /* Heading/H4 22/28 di kedua breakpoint, bukan skala H3. */
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--teluk);
+  text-decoration: none;
+}
+
+.situs-merek__ikon {
+  width: 30px;
+  height: 30px;
+}
+
+/* Label/Nav: Figtree Medium 16/20, warna Tinta, jarak antar tautan 36. */
+.situs-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sela-1) 36px;
+}
+
+.situs-nav a {
+  position: relative;
+  display: inline-block;
+  color: var(--tinta);
+  font-size: var(--ukuran-label);
+  line-height: 20px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* "Garis aktif" Figma 855:234: batang 24 x 3 bersudut penuh, di tengah,
+   6px di bawah label. Di Figma keadaan ini disembunyikan pada hero. */
+.situs-nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 26px;
+  width: 24px;
+  height: 3px;
+  margin-left: -12px;
+  border-radius: 999px;
+  background-color: transparent;
+}
+
+.situs-nav a:hover::after,
+.situs-nav a[aria-current]::after {
+  background-color: var(--kuning);
+}
+
+/* Layar sempit (Figma 855:675): hanya logo dan tombol menu yang tampil.
+   Daftar tautan pindah ke baris sendiri saat menu dibuka. Figma tidak
+   punya frame menu terbuka, jadi bentuknya daftar bertumpuk sederhana. */
+.situs-nav {
+  order: 3;
+  flex-basis: 100%;
+}
+
+.situs-nav ul {
+  flex-direction: column;
+  gap: var(--sela-2);
+  padding: var(--sela-2) 0 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   4. Kerangka bagian dan latar berselang
+   -------------------------------------------------------------------------- */
+
+.bagian {
+  padding: var(--sela-5) 0;
+  scroll-margin-top: var(--sela-3);
+}
+
+.bagian-isi {
+  max-width: var(--lebar-maks);
+  margin: 0 auto;
+  padding: 0 var(--sela-2);
+}
+
+@media (min-width: 390px) {
+  .bagian-isi { padding-inline: 20px; }
+}
+
+.bagian--terang { background-color: var(--layar); }
+.bagian--ombak  { background-color: var(--langit); }
+
+.bagian--teluk {
+  background-color: var(--teluk);
+  color: var(--layar);
+}
+
+.bagian--teluk h2,
+.bagian--teluk h3 { color: var(--putih); }
+
+.bagian-sub {
+  font-size: var(--ukuran-sorot);
+  max-width: 54ch;
+}
+
+/* Label/Eyebrow (Figma): Figtree Bold 13/16, spasi huruf 1.82px (0.14em),
+   huruf besar, warna Kuning Tua. */
+.eyebrow {
+  margin: 0;
+  font-family: var(--huruf-isi);
+  font-size: var(--ukuran-halus);
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kuning-tua);
+}
+
+/* Di atas latar Teluk, eyebrow memakai Kuning. */
+.eyebrow--terang { color: var(--kuning); }
+
+/* Body/Small 14/22 warna Tinta. */
+.sumber-ringkas {
+  margin: 0;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--tinta);
+}
+
+/* Kalimat yang belum punya sumber — tidak boleh ikut tayang. */
+.perlu-sumber {
+  padding: var(--sela-2);
+  border-radius: var(--sudut);
+  background-color: var(--pasir);
+}
+
+/* Pemisah bergelombang antar bagian — Figma 855:269, 855:284, 855:357,
+   855:385. Masing-masing SVG 1440 x 80 berisi satu gelombang dua warna,
+   diregangkan selebar layar seperti di Figma (preserveAspectRatio="none"). */
+.transisi {
+  height: var(--tinggi-transisi);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+.transisi--01-ke-02 { background-image: url("../assets/images/transisi/01-ke-02.svg"); }
+.transisi--02-ke-03 { background-image: url("../assets/images/transisi/02-ke-03.svg"); }
+.transisi--03-ke-04 { background-image: url("../assets/images/transisi/03-ke-04.svg"); }
+.transisi--04-ke-05 { background-image: url("../assets/images/transisi/04-ke-05.svg"); }
+
+/* --------------------------------------------------------------------------
+   5. Tombol dan chip
+   -------------------------------------------------------------------------- */
+
+/* Tombol/Utama (Figma 855:90) dan Tombol/Garis (855:94):
+   padding 16px 24px 16px 28px, gap 10, radius penuh, label Label/Button
+   (Figtree SemiBold 16/20). Tinggi alami 52px. */
+.tombol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px 16px 28px;
+  /* Tanpa garis: di Figma Tombol/Utama tinggi 52, sedangkan varian bergaris
+     55 karena strokenya menambah kotak. Jadi garis hanya dipasang di varian
+     yang memang memilikinya. */
+  border: 0;
+  border-radius: var(--sudut-pil);
+  font-family: var(--huruf-isi);
+  font-size: var(--ukuran-label);
+  line-height: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Ikon panah 20px milik kedua tombol. */
+.tombol__ikon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+
+/* Tombol/Nav (Figma 855:244) — sama dengan Tombol/Garis, padding tegak 12px.
+   Hanya ada di navigasi desktop; di mobile Figma menggantinya dengan
+   tombol menu, jadi di sini disembunyikan sampai breakpoint 1024. */
+.tombol--nav {
+  display: none;
+  padding-block: 12px;
+}
+
+.tombol--lebar { width: 100%; }
+
+.tombol--utama {
+  background-color: var(--kuning);
+  color: var(--tinta);
+}
+
+.tombol--utama:hover { background-color: var(--kuning-tua); }
+
+/* Garis memakai Tinta, bukan Teluk (Figma: border var(--warna/ink)). */
+.tombol--garis {
+  background-color: transparent;
+  border: 1.5px solid var(--tinta);
+  color: var(--tinta);
+}
+
+.tombol--garis:hover { background-color: var(--pasir); }
+
+/* Opsi Angin (Figma 855:98 aktif, 855:100 biasa): persegi bersudut 16,
+   bukan pil. Padding 14px 20px, border 1.5px Pasir. */
+.tombol--pilihan {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px var(--sela-2);
+  border: 1.5px solid var(--pasir);
+  border-radius: var(--sudut);
+  background-color: var(--putih);
+  color: var(--tinta);
+}
+
+.tombol--pilihan:hover { border-color: var(--ombak); }
+
+.tombol--pilihan[aria-pressed="true"] {
+  background-color: var(--teluk);
+  border-color: var(--teluk);
+  color: var(--layar);
+}
+
+/* Tombol menu layar sempit (Figma 855:682): 44px, bulat, latar Layar,
+   tiga garis 18 x 2 px warna Teluk dengan jarak 5px. */
+.tombol-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sudut-pil);
+  background-color: var(--layar);
+  cursor: pointer;
+}
+
+.tombol-menu__garis {
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--teluk);
+}
+
+/* Chip bagian — Figma 855:344: bungkus melipat dengan jarak 8. */
+.chip-grup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sela-1);
+}
+
+/* Chip biasa (855:348): latar Putih, garis 1px Pasir, padding 10/16,
+   label Figtree Medium 14/22 warna Teluk. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px var(--sela-2);
+  border: 1px solid var(--pasir);
+  border-radius: var(--sudut-pil);
+  background-color: var(--putih);
+  color: var(--teluk);
+  font-family: var(--huruf-isi);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Titik kuning hanya ada pada chip aktif (855:345). */
+.chip__titik {
+  display: none;
+  width: 8px;
+  height: 8px;
+}
+
+.chip[aria-pressed="true"] {
+  background-color: var(--teluk);
+  border-color: var(--teluk);
+  color: var(--layar);
+}
+
+.chip[aria-pressed="true"] .chip__titik { display: block; }
+
+/* Tampil seperti tautan teks, tetapi tingginya tetap 44px agar nyaman
+   diketuk di HP. */
+.tautan-aksi {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sela-1);
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--laut);
+  font-family: var(--huruf-isi);
+  font-size: var(--ukuran-kecil);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tautan-aksi:hover { color: var(--teluk); }
+
+/* --------------------------------------------------------------------------
+   6. Hero
+   -------------------------------------------------------------------------- */
+
+/* Hero mobile (Figma 855:570, 390 x 760) berlatar #BFE0E2. Warna ini
+   dipakai apa adanya di frame mobile Figma dan tidak ada di swatch
+   "Jong Batam / warna", jadi dicatat sebagai nilai frame, bukan token baru. */
+.bagian--hero {
+  position: relative;
+  height: 760px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #BFE0E2;
+}
+
+/* Panggung ilustrasi. Frame desktop 1440 x 960 dan frame mobile 720 x 480
+   sama-sama berasio 3:2, jadi satu set persentase memosisikan semua lapisan
+   di kedua breakpoint; yang berubah hanya ukuran dan letak panggung ini.
+
+   Mobile: panggung 720 x 480 pada top 300, digeser mendatar supaya titik
+   tengah kapal (72,22% lebar panggung) jatuh di tengah layar —
+   di 390 px itu persis left -320 seperti Figma. */
+/* Tingginya ditulis eksplisit, bukan lewat aspect-ratio: tinggi hasil
+   aspect-ratio dihitung sebagai "tak pasti", sehingga top/height persen
+   milik lapisan di dalamnya meleset beberapa piksel. */
+.hero-panggung {
+  position: absolute;
+  top: 300px;
+  left: calc(50% - 515px);
+  width: 720px;
+  height: 480px;
+  overflow: hidden;
+  background-color: var(--fajar);
+  pointer-events: none;
+}
+
+/* Lapisan hero: semua diposisikan dalam persen terhadap panggung.
+   Nilai persen = koordinat Figma dibagi 1440 (mendatar) atau 960 (tegak).
+   preserveAspectRatio="none" pada SVG-nya memang diregangkan seperti di Figma. */
+.lapis {
+  position: absolute;
+  display: block;
+}
+
+/* Langit      0,0      1440 x 700 */
+.lapis--langit   { left: 0; top: 0; width: 100%; height: 72.9167%; }
+/* Awan        0,40     1440 x 420 */
+.lapis--awan     { left: 0; top: 4.1667%; width: 100%; height: 43.75%; }
+/* Pulau       0,430    1440 x 260 */
+.lapis--pulau    { left: 0; top: 44.7917%; width: 100%; height: 27.0833%; }
+/* Laut        0,690    1440 x 270 */
+.lapis--laut     { left: 0; top: 71.875%; width: 100%; height: 28.125%; }
+/* Matahari    1040,170  320 x 320 */
+.lapis--matahari { left: 72.2222%; top: 17.7083%; width: 22.2222%; height: 33.3333%; }
+/* Jong        660,390   760 x 520 */
+.lapis--kapal    { left: 45.8333%; top: 40.625%; width: 52.7778%; height: 54.1667%; }
+
+/* Teks hero — Figma 855:686 (mobile): left 20, top 96, lebar 350,
+   jarak antar elemen 16. */
+.hero-teks {
+  position: relative;
+  max-width: var(--lebar-maks);
+  margin: 0 auto;
+  padding: 96px 20px 0;
+}
+
+.hero-teks h1 {
+  max-width: 350px;
+  margin-bottom: var(--sela-2);
+}
+
+/* Mobile/Body-Large 17/27 warna Teluk; desktop Body/Large 20/30 warna Tinta. */
+.hero-kalimat {
+  max-width: 350px;
+  margin-bottom: var(--sela-2);
+  color: var(--teluk);
+}
+
+/* --------------------------------------------------------------------------
+   7. Bagian 02 — media slot
+   -------------------------------------------------------------------------- */
+
+/* Bagian 02 — Figma 855:690 (mobile): kolom tunggal, padding tegak 56,
+   jarak antar elemen 16. */
+.bagian--kenali { padding: 56px 0; }
+
+.kenali-tata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+/* Mobile: pembungkus larut sehingga anak-anaknya ikut satu kolom. */
+.kenali-kolom { display: contents; }
+
+/* Figma mobile menaruh sumber ringkas SETELAH media. */
+.kenali-tata > .kenali-kolom > .sumber-ringkas { order: 1; }
+
+/* Mobile/Body-Large 17/27 warna Tinta. */
+.kenali-paragraf {
+  max-width: none;
+  margin: 0;
+  color: var(--tinta);
+}
+
+.bagian-isi--dua-kolom {
+  display: grid;
+  gap: var(--sela-4);
+}
+
+/* Anak grid default memakai min-width: auto, sehingga isi terlebar
+   (baris tombol, tabel) bisa melebarkan track melewati layar. */
+.bagian-isi--dua-kolom > *,
+.angin-area > * {
+  min-width: 0;
+}
+
+/* Media — Figma 855:695: kolom, jarak 14. */
+.media-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+}
+
+/* Slot gambar 4:3 (855:696): tinggi 262 di mobile, 472 di desktop,
+   latar Langit, garis putus-putus 2px Ombak, sudut 24. */
+.media-slot__kosong {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sela-1);
+  height: 262px;
+  padding-inline: var(--sela-3);
+  border: 2px dashed var(--ombak);
+  border-radius: var(--sudut-besar);
+  background-color: var(--langit);
+  text-align: center;
+}
+
+.media-slot__kosong--pendek {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  padding: var(--sela-3);
+}
+
+/* Label/Eyebrow tetapi warnanya Laut, bukan Kuning Tua. */
+.media-slot__label {
+  margin: 0;
+  font-size: var(--ukuran-halus);
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--laut);
+}
+
+.media-slot__arahan {
+  margin: 0;
+  max-width: 290px;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--teluk);
+}
+
+.media-slot figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Heading/H4 22/28 warna Teluk — ukuran sama di kedua breakpoint,
+   jadi ditulis tetap, bukan lewat token H3 yang membesar di desktop. */
+.media-slot__judul {
+  font-family: var(--huruf-judul);
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--teluk);
+}
+
+.media-slot__kredit {
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--kuning-tua);
+}
+
+/* --------------------------------------------------------------------------
+   8. Bagian 03 — ilustrasi kapal, chip, hotspot, kartu bagian
+   -------------------------------------------------------------------------- */
+
+/* Mobile (Figma 855:702): satu kolom, padding tegak 56, jarak 16. */
+.bagian--perahu {
+  position: relative;
+  padding: 56px 0;
+  overflow: hidden;
+}
+
+.perahu-tata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+.perahu-tata > p { max-width: none; }
+
+/* Mobile/Body-Large 17/27 warna Teluk. */
+.perahu-pengantar {
+  margin: 0;
+  color: var(--teluk);
+}
+
+/* Label "Pilih bagian" hanya ada di frame desktop. */
+.perahu-label-chip { display: none; }
+
+/* Panggung kapal mobile: Figma 855:716 — 350 x 300, kapal 349,6 x 239,2
+   pada y=20. Lebarnya mengikuti kolom, jadi dipakai persen. */
+.kapal-panggung {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 350 / 300;
+}
+
+.kapal-bungkus {
+  position: absolute;
+  left: 0.06%;
+  top: 6.6667%;
+  width: 99.886%;
+  aspect-ratio: 760 / 520;
+}
+
+.kapal-gambar {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Keadaan gagal: kapal tidak termuat. Hotspot tetap disembunyikan
+   js/hotspot.js, chip dan kartu tetap bisa dipakai. */
+.kapal-bungkus--gagal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--ombak);
+  border-radius: var(--sudut-besar);
+  background-color: color-mix(in srgb, var(--putih) 70%, transparent);
+}
+
+.kapal-bungkus--gagal .kapal-gambar,
+.kapal-bungkus--gagal .label-bagian { display: none; }
+
+.kapal-bungkus--gagal::after {
+  content: "Ilustrasi kapal gagal dimuat. Pakai daftar bagian di atas.";
+  max-width: 28ch;
+  padding: var(--sela-3);
+  font-size: var(--ukuran-halus);
+  color: var(--kuning-tua);
+  text-align: center;
+}
+
+/* Hotspot/Titik (Figma 855:102): 44px, gambar SVG apa adanya.
+   --x/--y diisi di index.html sebagai PERSEN terhadap gambar kapal,
+   jadi titik tetap menempel saat kapal diskalakan. */
+.hotspot {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: url("../assets/images/ikon/hotspot-titik.svg") center / 100% 100% no-repeat;
+  cursor: pointer;
+}
+
+.hotspot span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* Label kecil di samping titik (Figma 855:323 dan kawan-kawan):
+   pil latar Layar, px 12 py 6, Body/Small. Desktop saja. */
+.label-bagian {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  display: none;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: var(--sudut-pil);
+  background-color: var(--layar);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--tinta);
+  white-space: nowrap;
+}
+
+/* Kartu bagian — mobile memakai bentuk sheet (Figma 855:756):
+   sudut 24, padding 20 dengan atas 12 dan bawah 24, bayangan ke atas. */
+.kartu-bagian {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px var(--sela-2) var(--sela-3);
+  border: 1px solid var(--pasir);
+  border-radius: var(--sudut-besar);
+  background-color: var(--layar);
+  box-shadow: 0 -4px 24px rgba(18, 38, 43, 0.16);
+}
+
+/* Pegangan sheet 40 x 4. */
+.kartu-bagian__pegangan {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--pasir);
+}
+
+.kartu-bagian__hitung {
+  margin: 0;
+  font-size: var(--ukuran-halus);
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--kuning-tua);
+}
+
+/* Heading/H3 28/34 di kedua breakpoint. */
+.kartu-bagian__judul {
+  margin: 0;
+  font-size: 28px;
+  line-height: 34px;
+}
+
+.kartu-bagian__isi {
+  max-width: none;
+  margin: 0;
+  font-size: var(--ukuran-label);
+  line-height: 26px;
+  color: var(--tinta);
+}
+
+.kartu-bagian__navigasi {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 6px;
+}
+
+/* "Sebelumnya" memakai warna Ombak seperti keadaan nonaktif di Figma. */
+.tautan-aksi--mundur { color: var(--ombak); }
+
+.tautan-aksi--mundur:hover { color: var(--laut); }
+
+/* Dasar laut (Figma 855:328) hanya ada di frame desktop. */
+.perahu-dasar-laut { display: none; }
+
+/* --------------------------------------------------------------------------
+   9. Bagian 04 — diagram alur angin
+   -------------------------------------------------------------------------- */
+
+/* Mobile (Figma 855:765): kolom, padding tegak 56, jarak 16. */
+.bagian--angin-jong { padding: 56px 0; }
+
+.angin-jong-tata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+.angin-jong-tata > p { max-width: none; }
+
+/* Mobile/Body-Large 17/27 warna Layar. */
+.angin-jong-pengantar {
+  margin: 0;
+  color: var(--layar);
+}
+
+/* Kartu diagram (855:769): latar Layar, sudut 20, padding 24/20,
+   jarak antar baris 4. */
+.alur-kartu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sela-3) var(--sela-2);
+  border-radius: 20px;
+  background-color: var(--layar);
+}
+
+/* Simpul: lingkaran nomor 40px + blok teks, jarak 14. */
+.alur-kartu__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 0;
+  background: none;
+}
+
+.alur-kartu__nomor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  border-radius: var(--sudut-pil);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  font-weight: 700;
+  color: var(--layar);
+}
+
+.alur-kartu__item--satu  .alur-kartu__nomor { background-color: var(--bata); }
+.alur-kartu__item--dua   .alur-kartu__nomor { background-color: var(--kuning-tua); }
+.alur-kartu__item--tiga  .alur-kartu__nomor { background-color: var(--laut); }
+
+.alur-kartu__teks {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Judul simpul memakai gaya Label/Eyebrow, bukan skala judul. */
+.alur-kartu__judul {
+  margin: 0;
+  font-family: var(--huruf-isi);
+  font-variation-settings: normal;
+  font-size: var(--ukuran-halus);
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.alur-kartu__item--satu  .alur-kartu__judul { color: var(--bata); }
+.alur-kartu__item--dua   .alur-kartu__judul { color: var(--kuning-tua); }
+.alur-kartu__item--tiga  .alur-kartu__judul { color: var(--laut); }
+
+/* Body/Base 16/26 warna Teluk di kedua breakpoint. */
+.alur-kartu__isi {
+  max-width: none;
+  margin: 0;
+  font-size: var(--ukuran-label);
+  line-height: 26px;
+  color: var(--teluk);
+}
+
+/* Penghubung antar simpul (855:776): panah turun di mobile. */
+.alur-kartu__panah {
+  padding: 2px 0 2px 12px;
+  font-family: var(--huruf-judul);
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--kuning-tua);
+}
+
+.alur-kartu__panah::before { content: "\2193"; }
+
+/* --------------------------------------------------------------------------
+   10. Bagian 05 — coba arah angin
+   -------------------------------------------------------------------------- */
+
+/* Mobile (Figma 855:792): kolom, padding tegak 56, jarak 16. */
+.bagian--angin { padding: 56px 0; }
+
+.angin-tata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+.angin-kepala {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Jarak diatur gap 12, jadi margin bawaan judul dan paragraf dinolkan. */
+.angin-kepala > * { max-width: none; margin: 0; }
+
+.angin-pengantar { color: var(--teluk); }
+
+.angin-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+/* Panggung ilustrasi (855:395): sudut 32, isi terpotong. */
+.angin-panggung {
+  position: relative;
+  margin: 0;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.angin-panggung__gambar {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Label melayang; --x/--y persen terhadap panggung 820 x 640. */
+.angin-label {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: var(--sudut-pil);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  white-space: nowrap;
+}
+
+.angin-label--angin {
+  --x: 10.122%;
+  --y: 48.906%;
+
+  background-color: var(--bata);
+  color: var(--putih);
+}
+
+.angin-label--gerak {
+  --x: 52.195%;
+  --y: 3.594%;
+
+  background-color: var(--kuning);
+  color: var(--tinta);
+}
+
+/* Legenda (855:496): pil Teluk di sudut kiri bawah panggung. */
+.angin-legenda {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 14px;
+  padding: 8px 14px;
+  border-radius: var(--sudut-pil);
+  background-color: var(--teluk);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--layar);
+}
+
+.angin-legenda__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Panel kontrol (855:509). */
+.angin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: var(--sela-3) var(--sela-2);
+  border: 1px solid var(--pasir);
+  border-radius: 32px;
+  background-color: var(--putih);
+  box-shadow: 0 8px 24px rgba(18, 38, 43, 0.1);
+}
+
+/* Heading/H4 22/28 di kedua breakpoint. */
+.angin-panel__judul {
+  margin: 0;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.angin-pilihan {
+  display: flex;
+  gap: var(--sela-1);
+}
+
+.angin-pemisah {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background-color: var(--pasir);
+}
+
+/* Penjelasan (855:516): latar Pasir, sudut 20, padding 16/18, jarak 6. */
+.angin-penjelasan {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--sela-2) 18px;
+  border-radius: 20px;
+  background-color: var(--pasir);
+}
+
+.angin-penjelasan__judul {
+  margin: 0;
+  font-family: var(--huruf-isi);
+  font-variation-settings: normal;
+  font-size: var(--ukuran-label);
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--teluk);
+}
+
+.angin-penjelasan__isi {
+  max-width: none;
+  margin: 0;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--tinta);
+}
+
+/* Catatan alat belajar (855:519). */
+.angin-catatan {
+  display: flex;
+  gap: 12px;
+  max-width: none;
+  margin: 0;
+  padding: 14px 18px;
+  border-radius: var(--sudut);
+  background-color: var(--pasir);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--tinta);
+}
+
+.angin-catatan__ikon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+
+/* --------------------------------------------------------------------------
+   11. Bagian 06 — nilai budaya dan kartu fakta
+   -------------------------------------------------------------------------- */
+
+.bagian--nilai { padding: 56px 0; }
+
+.nilai-tata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+.nilai-kolom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-2);
+}
+
+.nilai-kolom > * { max-width: none; margin: 0; }
+
+.nilai-paragraf { color: var(--tinta); }
+
+/* Kartu fakta (Figma 855:529): latar Putih, garis 1px Pasir, sudut 24. */
+.kartu-fakta {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--pasir);
+  border-radius: var(--sudut-besar);
+  background-color: var(--putih);
+  overflow: hidden;
+}
+
+/* Slot foto 16:9 (855:530): latar Langit, isi di tengah, jarak 6. */
+.kartu-fakta__slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  aspect-ratio: 16 / 9;
+  padding-inline: var(--sela-3);
+  background-color: var(--langit);
+  text-align: center;
+}
+
+.kartu-fakta__arahan {
+  max-width: 380px;
+  margin: 0;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--teluk);
+}
+
+.kartu-fakta__isi { padding: 12px var(--sela-2) 20px; }
+
+.kartu-fakta__daftar { margin: 0; }
+
+/* Satu baris fakta: istilah 150px + nilai, bergaris bawah Pasir. */
+.kartu-fakta__baris {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sela-2);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--pasir);
+}
+
+.kartu-fakta__baris dt {
+  flex: 0 0 auto;
+  width: 110px;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  font-weight: 600;
+  color: var(--kuning-tua);
+}
+
+.kartu-fakta__baris dd {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--ukuran-label);
+  line-height: 26px;
+  font-weight: 500;
+  color: var(--teluk);
+}
+
+.kartu-fakta__sumber {
+  max-width: none;
+  margin: 0;
+  padding-top: 14px;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  font-weight: 600;
+  color: var(--teluk);
+}
+
+.kartu-fakta__sumber a { color: var(--teluk); }
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+
+/* Figma 855:548: latar Teluk, padding 72/80/40, jarak 48. */
+.situs-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-4);
+  padding: 56px 20px 40px;
+  background-color: var(--teluk);
+  color: var(--layar);
+}
+
+.footer-kolom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sela-4);
+  max-width: var(--lebar-maks);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.footer-kolom__item {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-kolom__item > h3 { margin: 0; }
+
+.footer-daftar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+  color: var(--layar);
+}
+
+.situs-footer a { color: var(--layar); }
+.situs-footer a:hover { color: var(--putih); }
+
+/* Baris bawah (855:566): garis atas Laut, padding atas 20. */
+.footer-bawah {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sela-2);
+  max-width: var(--lebar-maks);
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--laut);
+  font-size: var(--ukuran-kecil);
+  line-height: var(--tinggi-kecil);
+}
+
+.footer-bawah p {
+  margin: 0;
+  color: var(--ombak);
+}
+
+.footer-bawah a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   13. Tablet
+   -------------------------------------------------------------------------- */
+
+/* Figma tidak punya frame tablet. Rentang ini memakai tata letak mobile
+   dengan margin lebih lega; angkanya tidak dibandingkan ke Figma. */
+@media (min-width: 768px) {
+  :root {
+    --ukuran-judul-1: 56px;
+    --tinggi-judul-1: 60px;
+    --ukuran-judul-2: 40px;
+    --tinggi-judul-2: 46px;
+    --ukuran-judul-3: 26px;
+    --tinggi-judul-3: 32px;
+    --ukuran-sorot: 22px;
+    --tinggi-transisi: 64px;
+  }
+
+  .bagian-isi,
+  .situs-header,
+  .situs-footer,
+  .hero-teks { padding-left: var(--sela-4); padding-right: var(--sela-4); }
+
+  .hero-teks h1,
+  .hero-kalimat { max-width: 54%; }
+
+  .alur-kartu { grid-template-columns: repeat(3, 1fr); }
+
+  .fakta-blok { gap: var(--sela-3); }
+
+  .footer-kolom { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* --------------------------------------------------------------------------
+   14. Desktop
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 1024px) {
+  :root {
+    --ukuran-judul-1: 72px;   /* Display/Hero 72/76 */
+    --tinggi-judul-1: 76px;
+    --ukuran-judul-2: 48px;   /* Heading/H2   48/54 */
+    --tinggi-judul-2: 54px;
+    --ukuran-judul-3: 28px;   /* Heading/H3   28/36 */
+    --tinggi-judul-3: 36px;
+    --ukuran-isi: 16px;       /* Body/Base    16/26 */
+    --tinggi-isi: 26px;
+    --tinggi-transisi: 80px;
+  }
+
+  .bagian-isi,
+  .situs-footer { padding-inline: 80px; }
+
+  /* Figma 855:224: baris 1280 x 56 pada margin 80/36 → tinggi total 128. */
+  .situs-header {
+    min-height: 128px;
+    padding: 36px 80px;
+  }
+
+  /* Desktop memakai baris tautan penuh; tombol menu tidak dipakai. */
+  .tombol-menu { display: none; }
+
+  .tombol--nav { display: inline-flex; }
+
+  .situs-nav {
+    order: 0;
+    flex-basis: auto;
+    display: block !important;
+  }
+
+  .situs-nav ul {
+    flex-direction: row;
+    gap: var(--sela-1) 36px;
+    padding: 0;
+  }
+
+  .bagian-isi--dua-kolom {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: var(--sela-5);
+  }
+
+  /* Bagian 02 desktop (Figma 855:272, tinggi 770): kolom kiri 570, media
+     630, jarak 80. Jarak tegak di kolom kiri tidak seragam, jadi diambil
+     dari selisih koordinat Figma, bukan satu nilai gap. */
+  /* Figma 855:272 tinggi 770: isi mulai 80, media berakhir di 646. */
+  .bagian--kenali { padding: 80px 0 124px; }
+
+  /* Kolom 570 dan 630 dengan jarak 80 — totalnya persis 1280 di 1440.
+     Satuan fr supaya ikut mengecil di bawah 1440 tanpa saling tumpang. */
+  .kenali-tata {
+    display: grid;
+    grid-template-columns: 570fr 630fr;
+    column-gap: 80px;
+    align-items: start;
+  }
+
+  .kenali-kolom { display: block; }
+
+  /* Lebar kolom yang menentukan, bukan batas --lebar-teks bawaan <p>. */
+  .kenali-kolom > p { max-width: none; }
+
+  /* Jarak tegak di kolom kiri tidak seragam; nilainya selisih koordinat
+     Figma: 80→124→202→304→396. */
+  /* Kotak teks eyebrow di Figma desktop 30px tinggi (baris 16 + ruang 14),
+     lalu jarak 14 ke judul — totalnya 28 di bawah baris teks. */
+  .kenali-kolom > .eyebrow              { margin-bottom: 28px; }
+  .kenali-kolom > h2                    { margin-bottom: 24px; }
+  .kenali-kolom > .kenali-paragraf--satu { margin-bottom: 12px; }
+  .kenali-kolom > .kenali-paragraf--dua  { margin-bottom: 32px; }
+  .kenali-kolom > .sumber-ringkas       { order: 0; }
+
+  /* Media mulai 16px di bawah awal kolom kiri (Figma: 96 vs 80). */
+  .kenali-tata > .media-slot { margin-top: 16px; }
+
+  .kenali-paragraf {
+    font-size: var(--ukuran-sorot);
+    line-height: var(--tinggi-sorot);
+  }
+
+  .media-slot__kosong {
+    height: 472px;
+    padding-inline: 48px;
+  }
+
+  .media-slot__arahan { max-width: 420px; }
+
+  /* Hero desktop (Figma 855:120, 1440 x 960): tinggi bagian datang dari
+     rasio 3:2, jadi di 1440 px persis 960 dan panggung mengisinya penuh. */
+  .bagian--hero {
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .hero-panggung {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Judul 80,200 (lebar 680); pengantar 80,456 (lebar 500);
+     tombol 80,556. Jarak tegaknya diturunkan dari selisih itu. */
+  .hero-teks {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    padding: 200px 80px 0;
+  }
+
+  .hero-teks h1 {
+    max-width: 680px;
+    margin-bottom: 28px;
+  }
+
+  .hero-kalimat {
+    max-width: 500px;
+    margin-bottom: 40px;
+    font-size: var(--ukuran-sorot);
+    line-height: var(--tinggi-sorot);
+    color: var(--tinta);
+  }
+
+  /* Bagian 03 desktop (Figma 855:287, 1440 x 900). Isinya ditempatkan
+     mutlak seperti di Figma karena posisinya saling terkait (kartu,
+     penghubung, dan titik hotspot harus segaris). */
+  .bagian--perahu { padding: 0; }
+
+  /* Semua posisi di bawah memakai PERSEN terhadap bingkai Figma
+     1440 x 900, bukan piksel tetap. Di 1440 px hasilnya sama persis
+     dengan Figma; di bawah itu seluruh adegan mengecil sebanding,
+     jadi tidak ada yang meluber ke samping. */
+  .perahu-tata {
+    position: relative;
+    display: block;
+    height: auto;
+    aspect-ratio: 1440 / 900;
+  }
+
+  .perahu-tata > .eyebrow:not(.perahu-label-chip) { position: absolute; left: 5.5556%; top: 8%; }
+  .perahu-tata > h2              { position: absolute; left: 5.5556%; top: 12.4444%; width: 38.1944%; margin: 0; }
+  .perahu-tata > .perahu-pengantar {
+    position: absolute;
+    left: 5.5556%;
+    top: 26.2222%;
+    width: 33.3333%;
+    font-size: var(--ukuran-sorot);
+    line-height: var(--tinggi-sorot);
+    color: var(--tinta);
+  }
+
+  /* Kelompok "Pilih bagian": label + chip, jarak 12 (Figma 855:342). */
+  .perahu-tata > .perahu-label-chip {
+    display: block;
+    position: absolute;
+    left: 5.5556%;
+    top: 36.4444%;
+  }
+
+  .perahu-tata > .chip-grup {
+    position: absolute;
+    left: 5.5556%;
+    top: 39.5556%;
+  }
+
+  .perahu-tata > .kapal-panggung {
+    position: absolute;
+    left: 43.0556%;
+    top: 26.4444%;
+    width: 52.7778%;
+    height: 57.7778%;
+    aspect-ratio: auto;
+  }
+
+  .kapal-panggung .kapal-bungkus {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .label-bagian { display: block; }
+
+  /* Titik yang sedang aktif memakai kartu, jadi labelnya disembunyikan. */
+  .kapal-bungkus[data-bagian-aktif="tiang"]   .label-bagian[data-bagian="tiang"],
+  .kapal-bungkus[data-bagian-aktif="lambung"] .label-bagian[data-bagian="lambung"],
+  .kapal-bungkus[data-bagian-aktif="cadik"]   .label-bagian[data-bagian="cadik"] {
+    display: none;
+  }
+
+  /* Kartu bagian desktop (Figma 855:334): 270 lebar, sudut 20,
+     padding 18/20, bayangan ke bawah. */
+  .perahu-tata > .kartu-bagian {
+    position: absolute;
+    left: 31.25%;
+    top: 44.4444%;
+    width: 18.75%;
+    min-width: 230px;
+    padding: 18px 20px;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(18, 38, 43, 0.18);
+  }
+
+  .kartu-bagian__pegangan { display: none; }
+
+  .kartu-bagian__isi {
+    font-size: var(--ukuran-kecil);
+    line-height: var(--tinggi-kecil);
+  }
+
+  .kartu-bagian__navigasi { padding-top: 0; }
+
+  /* Figma hanya menggambar "Sebelumnya" pada sheet mobile. */
+  .tautan-aksi--mundur { display: none; }
+
+  .kartu-bagian__navigasi { justify-content: flex-start; }
+
+  /* Penghubung kartu–hotspot (855:339): 154 x 16 dari tepi kanan kartu
+     menuju titik Layar. Figma hanya menggambarnya untuk keadaan Layar. */
+  .kartu-bagian::after {
+    content: "";
+    position: absolute;
+    left: 100%;
+    top: 56px;
+    display: none;
+    width: 154px;
+    height: 16px;
+    background: url("../assets/images/ikon/penghubung.svg") center / 100% 100% no-repeat;
+  }
+
+  .kartu-bagian[data-bagian-aktif="layar"]::after { display: block; }
+
+  /* Bagian 04 desktop (Figma 855:360, tinggi 553). */
+  .bagian--angin-jong { padding: 70px 0 126px; }
+
+  .angin-jong-tata { display: block; }
+
+  .angin-jong-tata > .eyebrow { margin-bottom: 29px; }
+
+  .angin-jong-tata > h2 {
+    width: min(900px, 100%);
+    margin-bottom: 20px;
+    color: var(--layar);
+  }
+
+  .angin-jong-pengantar {
+    width: min(720px, 100%);
+    margin-bottom: 18px;
+    font-size: var(--ukuran-sorot);
+    line-height: var(--tinggi-sorot);
+    color: var(--putih);
+  }
+
+  /* Kartu diagram desktop (855:364): mendatar, padding 40, sudut 28,
+     jarak antar simpul dan panah 20. */
+  .alur-kartu {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sela-2);
+    padding: var(--sela-4);
+    border-radius: 28px;
+  }
+
+  /* Simpul desktop: kepala (nomor 44 + label) di atas, teks di bawah. */
+  .alur-kartu__item {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .alur-kartu__nomor {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Di desktop nomor dan label sebaris, jadi kepalanya dibentuk ulang:
+     nomor mengambang ke kiri label lewat urutan flex pada simpul. */
+  .alur-kartu__item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    grid-template-rows: 44px auto;
+    column-gap: 12px;
+    row-gap: 10px;
+    align-items: center;
+  }
+
+  .alur-kartu__teks {
+    display: contents;
+  }
+
+  .alur-kartu__judul { grid-area: 1 / 2; align-self: center; }
+
+  .alur-kartu__isi { grid-area: 2 / 1 / 3 / 3; }
+
+  .alur-kartu__panah {
+    flex: 0 0 auto;
+    padding: 0;
+  }
+
+  .alur-kartu__panah::before { content: "\2192"; }
+
+  /* Dasar laut (855:328): pita penuh lebar di dasar bagian. */
+  .perahu-dasar-laut {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    top: 91.7778%;
+    height: 8.2222%;
+    background-color: var(--laut);
+  }
+
+  /* Bagian 05 desktop (Figma 855:388, 1440 x 960): padding 80, jarak 40. */
+  .bagian--angin { padding: 80px 0; }
+
+  .angin-tata { gap: var(--sela-4); }
+
+  .angin-kepala > h2 { width: min(700px, 100%); }
+
+  .angin-pengantar {
+    width: min(620px, 100%);
+    font-size: var(--ukuran-isi);
+    line-height: var(--tinggi-isi);
+    color: var(--tinta);
+  }
+
+  /* Panggung 820 x 640, panel 436; keduanya berjarak 24. */
+  .angin-area {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--sela-3);
+  }
+
+  /* flex-basis 820/436 menjumlah 1256 + gap 24 = 1280, jadi di 1440 px
+     ukurannya persis seperti Figma; di bawah itu keduanya mengecil
+     sebanding, bukan meluber. */
+  .angin-panggung {
+    flex: 1 1 820px;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 820 / 640;
+  }
+
+  .angin-panel {
+    flex: 1 1 436px;
+    min-width: 0;
+    width: auto;
+    padding: 32px;
+  }
+
+  /* Bagian 06 desktop (Figma 855:525, tinggi 757). */
+  /* Figma 855:525 tinggi 757: kartu berakhir di 687. */
+  .bagian--nilai { padding: 72px 0 70px; }
+
+  .nilai-tata {
+    display: grid;
+    /* minmax(0, …) supaya pembagian benar-benar proporsional dan tidak
+       ditarik lebar min-content isi tiap kolom. */
+    grid-template-columns: minmax(0, 720fr) minmax(0, 560fr);
+    /* Figma: kolom 720 dan 560 bersebelahan tanpa jarak (kartu mulai 800).
+       Tanpa ini jarak 16px dari aturan mobile ikut terbawa. */
+    column-gap: 0;
+    align-items: start;
+  }
+
+  .nilai-kolom > h2 { width: min(620px, 100%); }
+
+  .nilai-paragraf {
+    width: min(600px, 100%);
+    font-size: var(--ukuran-sorot);
+    line-height: var(--tinggi-sorot);
+  }
+
+  /* Judul 112, paragraf 190: selisihnya jarak 24 setelah baris judul. */
+  .nilai-kolom { gap: 0; }
+  .nilai-kolom > .eyebrow { margin-bottom: 24px; }
+  .nilai-kolom > h2 { margin-bottom: 24px; }
+
+  .kartu-fakta { width: 100%; }
+
+  .kartu-fakta__slot {
+    aspect-ratio: auto;
+    height: 315px;
+    padding-inline: var(--sela-4);
+  }
+
+  .kartu-fakta__isi { padding: 12px 28px 20px; }
+
+  .kartu-fakta__baris dt { width: 150px; }
+
+  /* Footer desktop (Figma 855:548): padding 72/80/40, tiga kolom
+     berjarak 48. */
+  .situs-footer { padding: 72px 80px 40px; }
+
+  .footer-kolom { flex-direction: row; gap: var(--sela-4); }
+}

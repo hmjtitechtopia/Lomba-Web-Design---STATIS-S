@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Jong Batam — gerak: parallax, transisi, dan prefers-reduced-motion
+   Token, warna, dan tata letak ada di css/main.css.
+
+   Aturan pembagian tugas:
+   - main.css menentukan DI MANA sebuah lapisan berada (top/bottom/height).
+   - motion.css hanya menentukan BAGAIMANA lapisan itu bergerak.
+   - js/parallax.js hanya menulis --geser-x / --geser-y; tidak pernah
+     mengubah top/left, supaya browser cukup mengomposit transform.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Parallax lapisan
+   -------------------------------------------------------------------------- */
+
+/* Nilai awal 0 supaya tampilan tanpa JavaScript tetap rapi. */
+.lapis {
+  --geser-x: 0px;
+  --geser-y: 0px;
+
+  transform: translate3d(var(--geser-x), var(--geser-y), 0);
+}
+
+/* will-change hanya pada lapisan yang benar-benar digeser JavaScript;
+   memasangnya di semua lapisan justru memboroskan memori GPU. */
+.lapis[data-geser-y],
+.lapis[data-geser-x] { will-change: transform; }
+
+/* Lapisan kapal ikut bergeser, dan karena buih adalah anaknya, buih
+   selalu mengikuti lambung tanpa perhitungan terpisah. */
+.lapis--kapal { transform: translate3d(var(--geser-x), var(--geser-y), 0); }
+
+/* Layar sempit: kurangi jumlah lapisan yang digerakkan supaya scroll di HP
+   tetap ringan. Lapisan tetap tampil, hanya berhenti bergerak — ditandai
+   data-lapis-opsional="ya" di index.html dan dibaca js/parallax.js. */
+@media (max-width: 599px) {
+  .lapis[data-lapis-opsional="ya"] {
+    transform: none;
+    will-change: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Gerak kecil pada kontrol
+   -------------------------------------------------------------------------- */
+
+.tombol,
+.chip,
+.hotspot,
+.situs-nav a {
+  transition:
+    background-color 160ms ease-out,
+    border-color 160ms ease-out,
+    color 160ms ease-out,
+    transform 160ms ease-out;
+}
+
+/* Figma tidak menggambar keadaan hover/aktif yang membesar untuk
+   Hotspot/Titik, jadi titiknya tidak diskalakan: ukurannya tetap 44px
+   persis seperti komponen 855:102. Penanda keadaan aktif ada pada chip,
+   label, dan kartu. */
+
+/* Kartu bagian berganti isi; kedip singkat menandai pergantian tanpa
+   memindahkan tata letak. */
+.kartu-bagian { transition: box-shadow 200ms ease-out; }
+
+.kartu-bagian[data-berganti="ya"] {
+  animation: kartu-masuk 220ms ease-out;
+}
+
+@keyframes kartu-masuk {
+  from { opacity: 0.35; transform: translate3d(0, 6px, 0); }
+  to   { opacity: 1;    transform: translate3d(0, 0, 0); }
+}
+
+/* --------------------------------------------------------------------------
+   3. Gulir halus antar bagian
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* --------------------------------------------------------------------------
+   4. prefers-reduced-motion — semua gerak dekoratif mati
+   -------------------------------------------------------------------------- */
+
+/* Lapisan tetap pada posisi yang ditentukan main.css, jadi susunan 2.5D
+   tetap rapi; yang hilang hanya geraknya. Hotspot, chip, kartu, dan
+   pilihan arah angin tetap berfungsi penuh. */
+@media (prefers-reduced-motion: reduce) {
+  .lapis,
+  .lapis--kapal {
+    transform: none !important;
+    will-change: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
