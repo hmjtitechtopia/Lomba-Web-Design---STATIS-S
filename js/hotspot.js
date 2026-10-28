@@ -134,6 +134,10 @@ export function pasangHotspot() {
 
   if (!gambarKapal) {
     sembunyikanHotspot();
+  } else if (gambarKapal.tagName.toLowerCase() === 'svg') {
+    /* Kapal ditulis inline di index.html: tidak ada yang perlu dimuat,
+       jadi gambarnya selalu ada dan hotspot langsung bisa dipakai. */
+    tampilkanHotspot();
   } else if (gambarKapal.complete) {
     /* naturalWidth 0 pada gambar yang sudah "complete" berarti gagal. */
     if (gambarKapal.naturalWidth > 0) tampilkanHotspot();

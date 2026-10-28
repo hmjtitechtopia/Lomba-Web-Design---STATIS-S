@@ -806,6 +806,23 @@ ul, ol {
   height: 100%;
 }
 
+/* Penyorotan bagian. Kapal ditulis inline sebagai SVG dengan grup
+   data-bagian, jadi bagian yang dipilih bisa dibedakan tanpa gambar
+   tambahan. Figma tidak menggambar keadaan ini — ini tambahan supaya
+   pilihan chip/hotspot terlihat pada ilustrasinya, bukan hanya di kartu.
+
+   Air, buih, dan bayangan sengaja tidak ikut diredupkan: keduanya bukan
+   bagian perahu. */
+.kapal-bungkus[data-bagian-aktif] .kapal-bagian { opacity: 0.45; }
+
+.kapal-bungkus[data-bagian-aktif="layar"]   .kapal-bagian[data-bagian="layar"],
+.kapal-bungkus[data-bagian-aktif="tiang"]   .kapal-bagian[data-bagian="tiang"],
+.kapal-bungkus[data-bagian-aktif="lambung"] .kapal-bagian[data-bagian="lambung"],
+.kapal-bungkus[data-bagian-aktif="cadik"]   .kapal-bagian[data-bagian="cadik"] {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px var(--kuning));
+}
+
 /* Keadaan gagal: kapal tidak termuat. Hotspot tetap disembunyikan
    js/hotspot.js, chip dan kartu tetap bisa dipakai. */
 .kapal-bungkus--gagal {

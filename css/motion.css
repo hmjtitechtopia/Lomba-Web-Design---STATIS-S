@@ -50,6 +50,13 @@
   transition: opacity 180ms ease-out;
 }
 
+/* Pergantian sorotan bagian kapal: redup/terang berpindah halus, bukan
+   berkedip. Ini penanda pilihan, bukan hiasan, jadi di bawah
+   prefers-reduced-motion efeknya tetap ada — hanya transisinya mati. */
+.kapal-bagian {
+  transition: opacity 180ms ease-out, filter 180ms ease-out;
+}
+
 .tombol,
 .chip,
 .hotspot,
