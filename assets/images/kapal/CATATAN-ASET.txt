@@ -6,9 +6,62 @@ Aset kapal diekspor dari Figma "Desain Web" (file LeSiMlDeTw813UGPTp2aZw).
 Keduanya memakai preserveAspectRatio="none" dan memang diregangkan
 mengikuti kotak seperti di Figma.
 
-Posisi hotspot pada bagian 03 ditulis sebagai persen terhadap gambar kapal
-di index.html. Nilainya diukur dari koordinat Figma dan kebetulan sama
-persis di frame desktop maupun mobile:
+
+PEMISAHAN BAGIAN (kapal-jong-bagian.svg)
+----------------------------------------
+Di Figma lapisan kapal TIDAK bernama dan TIDAK dikelompokkan — semuanya
+"Vector", "Vector_2", dan seterusnya. Hanya "Cadik" yang sudah jadi grup.
+
+Pengelompokan di berkas ini ditambahkan manual, dibaca dari kotak batas dan
+warna tiap vektor, lalu diuji silang: keempat titik hotspot harus jatuh di
+dalam kotak batas bagian yang sesuai. Keempatnya cocok.
+
+  Grup                 Vektor asli              Kotak batas (dalam 760x520)
+  kapal-layar          Vector_3 – Vector_8      x72  y90   580 x 246
+  kapal-tiang          Vector_9, Vector_10      x318 y84    52 x 272
+  kapal-lambung        Vector_11 – Vector_23    x70  y280  618 x 132
+  kapal-cadik          grup "Cadik"             x140 y348  320 x 107
+  kapal-air-belakang   Vector, Vector_2         bayangan dan riak di belakang
+  kapal-buih           Vector_24, Vector_25     buih garis air, DI ATAS lambung
+
+Urutan gambar tidak diubah sama sekali, jadi tampilannya sama persis dengan
+ekspor asli. Id tiap vektor dipertahankan supaya ekspor ulang dari Figma
+mudah dibandingkan.
+
+Catatan: bendera di puncak tiang (Vector_10) ikut masuk grup tiang karena
+menempel pada tiang dan tidak punya hotspot sendiri.
+
+RISIKO: kalau Arla mengekspor ulang node 855:291, pengelompokan ini hilang
+dan harus dibuat lagi. Perbaikan akarnya ada di Figma — minta Arla memberi
+nama dan mengelompokkan lapisan di sana.
+
+
+SALINAN INLINE DI index.html
+----------------------------
+Bagian 03 TIDAK memuat berkas ini lewat <img>. Kapalnya ditulis inline
+sebagai <svg> di index.html supaya CSS bisa meredupkan bagian yang tidak
+dipilih dan menyorot yang dipilih — <object> maupun <use> ke berkas luar
+tidak bisa di-style dari dokumen induk.
+
+Artinya ada DUA salinan gambar yang sama. Kalau salah satu diubah, ubah
+keduanya. Berkas ini adalah salinan kanon (acuan terhadap Figma).
+
+Perbedaan render antara versi inline dan berkas ini sudah diukur dengan
+mix-blend-mode: difference — selisih rata-rata 3,57/255 dan hanya di garis
+tepi, murni anti-aliasing, tanpa beda bentuk.
+
+Dua hal yang WAJIB ikut saat menyalin:
+  1. fill="none" pada elemen <svg> akar. Tanpa itu setiap path yang hanya
+     bergaris (jahitan layar, lis lambung, buih) ikut terisi hitam, karena
+     nilai bawaan fill di SVG adalah black.
+  2. mask pada garis pelampung cadik. Tanpa mask, garis 4px jatuh di tengah
+     tepi dan pelampung terlihat lebih tebal daripada di Figma.
+
+
+POSISI HOTSPOT
+--------------
+Ditulis sebagai persen terhadap gambar kapal di index.html. Nilainya diukur
+dari koordinat Figma dan kebetulan sama persis di frame desktop maupun mobile:
 
   Layar    --x 32.9%  --y 44.2%
   Tiang    --x 48.2%  --y 30.8%

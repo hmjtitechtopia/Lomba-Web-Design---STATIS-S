@@ -1,7 +1,21 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="760" height="520" viewBox="0 0 760 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+<title>Perahu Jong — layar, tiang, lambung, dan cadik</title>
+<desc>Ekspor Figma node 855:291. Lapisan aslinya tidak bernama (Vector, Vector_2,
+dst.); pengelompokan di bawah ditambahkan secara manual berdasarkan kotak batas
+dan warna tiap vektor, lalu dicocokkan dengan keempat posisi hotspot. Urutan
+gambar TIDAK diubah, jadi tampilannya sama persis dengan ekspor asli. Id asli
+tiap vektor dipertahankan supaya ekspor ulang dari Figma mudah dibandingkan.</desc>
 <g id="Jong &#226;&#128;&#148; area model 3D" clip-path="url(#clip0_0_29)">
+
+<!-- Bayangan dan riak di belakang lambung. Bukan bagian perahu, jadi tidak
+     ikut disorot saat salah satu bagian dipilih. -->
+<g id="kapal-air-belakang">
 <path id="Vector" d="M380 448C551.208 448 690 442.627 690 436C690 429.373 551.208 424 380 424C208.792 424 70 429.373 70 436C70 442.627 208.792 448 380 448Z" fill="#0E3B43" fill-opacity="0.3"/>
 <path id="Vector_2" d="M70 488C120 434 250 414 392 414C536 414 640 448 688 542L668 546C632 494 530 474 392 474C262 474 150 480 70 488Z" fill="#0E3B43" fill-opacity="0.22"/>
+</g>
+
+<!-- LAYAR: dua bidang layar beserta garis jahitan dan pita kuningnya. -->
+<g id="kapal-layar" data-bagian="layar">
 <g id="Vector_3">
 <path d="M362 90L72 336Z" fill="black"/>
 <path d="M362 90L72 336" stroke-width="1.5" stroke="#12262B" stroke-opacity="0.45"/>
@@ -14,8 +28,18 @@
 <path d="M366 94L652 286Z" fill="black"/>
 <path d="M366 94L652 286" stroke-width="1.5" stroke="#12262B" stroke-opacity="0.5"/>
 </g>
+</g>
+
+<!-- TIANG: batang tegak beserta bendera kecil di puncaknya. Benderanya
+     ikut di sini karena menempel pada tiang dan tidak punya hotspot sendiri. -->
+<g id="kapal-tiang" data-bagian="tiang">
 <path id="Vector_9" d="M370 88.5C370 86.0147 367.985 84 365.5 84C363.015 84 361 86.0147 361 88.5V351.5C361 353.985 363.015 356 365.5 356C367.985 356 370 353.985 370 351.5V88.5Z" fill="#12262B"/>
 <path id="Vector_10" d="M366 84L318 94L366 106V84Z" fill="#E8A91C"/>
+</g>
+
+<!-- LAMBUNG: badan perahu, garis dalam, sepuluh segitiga hias, dan
+     lis kuning di tepi atas. -->
+<g id="kapal-lambung" data-bagian="lambung">
 <path id="Vector_11" d="M70 338C120 392 250 412 392 412C536 412 640 378 688 284L668 280C632 332 530 352 392 352C262 352 150 346 70 338Z" fill="#B6452C"/>
 <path id="Vector_12" d="M92 366C150 398 262 404 392 404C520 404 612 372 654 316" stroke-width="6" stroke="#8A2F1C" stroke-opacity="0.45"/>
 <path id="Vector_13" d="M196 394L205 368L214 394H196Z" fill="#E8A91C" fill-opacity="0.9"/>
@@ -29,8 +53,18 @@
 <path id="Vector_21" d="M484 394L493 368L502 394H484Z" fill="#E8A91C" fill-opacity="0.9"/>
 <path id="Vector_22" d="M520 394L529 368L538 394H520Z" fill="#E8A91C" fill-opacity="0.9"/>
 <path id="Vector_23" d="M70 338C150 346 262 352 392 352C530 352 632 332 668 280" stroke-width="9" stroke-linecap="round" stroke="#E8A91C"/>
+</g>
+
+<!-- Buih di garis air. Digambar DI ATAS lambung, jadi harus tetap di urutan
+     ini; memindahkannya ke grup air di belakang akan mengubah tampilan. -->
+<g id="kapal-buih">
 <path id="Vector_24" d="M60 412C100 405.333 140 405.333 180 412C220 418.667 260 418.667 300 412C340 405.333 380 405.333 420 412C460 418.667 500 418.667 540 412C580 405.333 620 402.667 660 404" stroke-width="3" stroke-linecap="round" stroke="#FAF3E3" stroke-opacity="0.85"/>
 <path id="Vector_25" d="M110 424C150 418.667 190 418.667 230 424C270 429.333 310 429.333 350 424C390 418.667 430 418.667 470 424C510 429.333 550 428 590 420" stroke-width="2.5" stroke-linecap="round" stroke="#FAF3E3" stroke-opacity="0.45"/>
+</g>
+
+<!-- CADIK: satu-satunya bagian yang memang sudah dikelompokkan dan diberi
+     nama di Figma. Istilahnya masih perlu sumber (BLUEPRINT_KIT/02). -->
+<g id="kapal-cadik" data-bagian="cadik">
 <g id="Cadik (ilustrasi placeholder)">
 <path id="Kayu penyambung" d="M193 347.75H196C197.243 347.75 198.25 348.757 198.25 350V436C198.25 437.243 197.243 438.25 196 438.25H193C191.757 438.25 190.75 437.243 190.75 436V350C190.75 348.757 191.757 347.75 193 347.75Z" fill="#8F5C00" stroke-width="1.5" stroke="#0E3B43"/>
 <path id="Kayu penyambung_2" d="M393 347.75H396C397.243 347.75 398.25 348.757 398.25 350V436C398.25 437.243 397.243 438.25 396 438.25H393C391.757 438.25 390.75 437.243 390.75 436V350C390.75 348.757 391.757 347.75 393 347.75Z" fill="#8F5C00" stroke-width="1.5" stroke="#0E3B43"/>
@@ -43,6 +77,8 @@
 </g>
 <rect id="Garis pelampung" x="175" y="435" width="250" height="4" rx="2" fill="#E8A91C"/>
 </g>
+</g>
+
 </g>
 <defs>
 <clipPath id="clip0_0_29">
