@@ -58,8 +58,9 @@
 
   --tinggi-transisi: 48px;
 
-  /* Tinggi bilah navigasi: Figma mobile 44 + margin 20/20 = 84. */
-  --tinggi-header: 84px;
+  /* Dipakai scroll-margin-top tiap bagian: tepi bawah kapsul mengambang
+     (10 + 64) ditambah sedikit ruang napas. */
+  --tinggi-header: 88px;
 }
 
 /* --------------------------------------------------------------------------
@@ -191,31 +192,33 @@ ul, ol {
   height: 1px;
 }
 
-/* Navigasi — Figma 855:224 (1280 x 56 pada margin 80/36) dan 855:675
-   (mobile 350 x 44 pada margin 20/20).
+/* Navigasi — kapsul mengambang ("Opsi A", keputusan Rahmad 28 Oktober 2026).
+   Menggantikan bilah selebar layar pada Figma 855:224 / 855:675.
 
-   position: fixed, bukan sticky: di Figma navigasi berada DI DALAM frame
-   hero dan menumpang di atas ilustrasi. Sticky menuntut header ikut alur
-   dokumen, yang akan mendorong hero turun 84/128px dan merusak tinggi
-   hero yang sudah pas dengan Figma. Dengan fixed, posisinya saat gulir 0
-   sama persis seperti sebelumnya, tetapi tetap terlihat saat menggulir. */
+   Arah ini dikunci dari riset Refero: bilah mengambang bersudut penuh
+   August Health (token navigasi radius 100px) + cincin rambut Memorisely
+   sebagai pengganti bayangan tebal + tesis Wayfinder NFB bahwa antarmuka
+   "duduk di atas adegan, bukan membingkainya". Tidak ada warna baru;
+   seluruhnya memakai token Jong yang sudah ada.
+
+   position: fixed, bukan sticky: sticky menuntut header ikut alur dokumen
+   dan itu akan mendorong hero turun lalu merusak tinggi hero yang sudah
+   pas dengan Figma.
+
+   Mobile: kapsul menempel 10px dari tepi, sehingga logo tetap jatuh di
+   (20, 27) dan tombol menu di (326, 20) — persis koordinat Figma 855:675. */
 .situs-header {
   position: fixed;
-  inset-inline: 0;
-  top: 0;
+  top: 10px;
+  inset-inline: 10px;
   z-index: 20;
   display: flex;
-  /* Wajib: tanpa ini daftar tautan yang ber-flex-basis 100% ikut berebut
-     ruang di baris yang sama, menjepit logo dan menindih judul hero. */
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: var(--sela-2);
-  max-width: var(--lebar-maks);
-  margin: 0 auto;
-  /* Figma mobile: baris navigasi 44px pada margin 20 → tinggi total 84. */
-  min-height: var(--tinggi-header);
-  padding: 20px;
+  min-height: 64px;
+  padding: 10px;
+  border-radius: 100px;
 }
 
 /* Bilah kaca buram saat pengunjung sudah menggulir. Figma tidak punya
@@ -232,16 +235,17 @@ ul, ol {
    layar penuh, sementara isi header tetap dibatasi 1440 dan di tengah. */
 .situs-header::before {
   content: "";
-  position: fixed;
-  inset-inline: 0;
-  top: 0;
+  position: absolute;
+  inset: 0;
   z-index: -1;
-  height: var(--tinggi-header);
+  border-radius: inherit;
   background-color: color-mix(in srgb, var(--layar) 72%, transparent);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
-  border-bottom: 1px solid color-mix(in srgb, var(--pasir) 70%, transparent);
-  box-shadow: 0 8px 24px rgba(18, 38, 43, 0.06);
+  /* Cincin rambut + bayangan hangat tipis, bukan garis bawah selebar layar:
+     kapsul perlu tepi di segala sisi. */
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--pasir) 70%, transparent),
+              0 10px 24px rgba(14, 59, 67, 0.10);
   opacity: 0;
 }
 
@@ -292,9 +296,12 @@ ul, ol {
    implementasi — bentuknya mengikuti bahasa visual kartu: permukaan Layar,
    garis Pasir, sudut 20. Tanpa permukaan sendiri, tautan akan terbaca di
    atas ilustrasi hero. */
+/* Panel diposisikan mutlak di bawah kapsul, bukan ikut alur di dalamnya,
+   supaya kapsul tetap setinggi 64px saat menu dibuka. */
 .situs-nav {
-  order: 3;
-  flex-basis: 100%;
+  position: absolute;
+  top: 100%;
+  inset-inline: 0;
   margin-top: var(--sela-1);
   border: 1px solid var(--pasir);
   border-radius: 20px;
@@ -436,14 +443,6 @@ ul, ol {
   flex: 0 0 auto;
   width: 20px;
   height: 20px;
-}
-
-/* Tombol/Nav (Figma 855:244) — sama dengan Tombol/Garis, padding tegak 12px.
-   Hanya ada di navigasi desktop; di mobile Figma menggantinya dengan
-   tombol menu, jadi di sini disembunyikan sampai breakpoint 1024. */
-.tombol--nav {
-  display: none;
-  padding-block: 12px;
 }
 
 .tombol--lebar { width: 100%; }
@@ -1446,30 +1445,35 @@ ul, ol {
     --ukuran-isi: 16px;       /* Body/Base    16/26 */
     --tinggi-isi: 26px;
     --tinggi-transisi: 80px;
-    /* Figma desktop: baris 56 + margin 36/36 = 128. */
-    --tinggi-header: 128px;
+    /* Tepi bawah kapsul desktop (24 + 54) ditambah ruang napas. */
+    --tinggi-header: 96px;
   }
 
   .bagian-isi,
   .situs-footer { padding-inline: 80px; }
 
-  /* Figma 855:224: baris 1280 x 56 pada margin 80/36 → tinggi total 128. */
+  /* Desktop: kapsul menyusut selebar isinya lalu diletakkan di tengah.
+     Tanpa tombol CTA, kapsul selebar layar akan menyisakan ruang kosong
+     di kanan; memeluk isi membuat bentuk pilnya terbaca. */
   .situs-header {
-    min-height: var(--tinggi-header);
-    padding: 36px 80px;
+    top: 24px;
+    inset-inline: 0;
+    width: max-content;
+    max-width: calc(100% - 48px);
+    margin-inline: auto;
+    gap: var(--sela-4);
+    min-height: 0;
+    padding: 12px 28px 12px 20px;
   }
 
   /* Desktop memakai baris tautan penuh; tombol menu tidak dipakai. */
   .tombol-menu { display: none; }
 
-  .tombol--nav { display: inline-flex; }
-
   /* Panel menu hanya untuk layar sempit; di desktop tautan kembali
-     menjadi satu baris tanpa permukaan sendiri. display !important
-     membatalkan atribut hidden bila jendela diperbesar saat menu terbuka. */
+     menjadi satu baris di dalam kapsul. display !important membatalkan
+     atribut hidden bila jendela diperbesar saat menu terbuka. */
   .situs-nav {
-    order: 0;
-    flex-basis: auto;
+    position: static;
     display: block !important;
     margin-top: 0;
     border: 0;
